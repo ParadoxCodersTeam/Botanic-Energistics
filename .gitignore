@@ -1,25 +1,23 @@
-+## gradle
-+/.gradle
-+/build
-+/gradle
-+/gradlew
-+/gradlew.bat
-+
-+## ForgeGradle
-+/run
-+
-+## eclipse
-+/eclipse
-+/.settings
-+/.metadata
-+/.classpath
-+/.project
-+/bin
-+
-+## intellij
-+/out
-+/.idea
-+/*.iml
-+/*.ipr
-+/*.iws
-+/atlassian-ide-plugin.xml
+## gradle
+.gradle/
+## ForgeGradle
+/run
+
+## binaries
+bin/
+
+## eclipse
+/eclipse
+/.settings
+/.metadata
+/.classpath
+/.project
+/bin
+
+## intellij
+/out
+/.idea
+/*.iml
+/*.ipr
+/*.iws
+/atlassian-ide-plugin.xml
