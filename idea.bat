@@ -1,2 +1,1 @@
-@
-gradlew.bat idea genIntellijRuns
+gradlew.bat setupdecompworkspace && gradle.bat idea
