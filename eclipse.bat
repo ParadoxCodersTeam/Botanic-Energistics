@@ -1,2 +1,1 @@
-@echo off
-gradlew eclipse
+gradle.bat setupdecompworkspace && gradle.bat eclipse
