@@ -1,0 +1,2 @@
+@
+gradlew.bat idea genIntellijRuns
