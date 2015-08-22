@@ -1,11 +1,27 @@
-[18:59:17] [main/INFO]: Setting user: Player454
-[18:59:19] [Client thread/INFO]: LWJGL Version: 2.9.1
-[18:59:27] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Botania-Energistics
-[18:59:28] [Sound Library Loader/INFO]: Sound engine started
-[18:59:39] [Client thread/INFO]: Created: 512x256 textures/blocks-atlas
-[18:59:39] [Client thread/INFO]: Created: 256x256 textures/items-atlas
-[18:59:39] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Botania-Energistics
-[18:59:39] [Client thread/INFO]: Created: 256x256 textures/items-atlas
-[18:59:39] [Client thread/INFO]: Created: 512x256 textures/blocks-atlas
-[18:59:40] [Sound Library Loader/INFO]: Sound engine started
-[19:00:04] [Client thread/INFO]: Stopping!
+[22:02:00] [main/INFO]: Setting user: Player234
+[22:02:01] [Client thread/INFO]: LWJGL Version: 2.9.1
+[22:02:08] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Botania-Energistics, FMLFileResourcePack:Applied Energistics 2, FMLFileResourcePack:Baubles, FMLFileResourcePack:Botania
+[22:02:13] [Sound Library Loader/INFO]: Sound engine started
+[22:02:21] [Client thread/INFO]: Created: 1024x512 textures/blocks-atlas
+[22:02:21] [Client thread/INFO]: Created: 512x512 textures/items-atlas
+[22:02:23] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Botania-Energistics, FMLFileResourcePack:Applied Energistics 2, FMLFileResourcePack:Baubles, FMLFileResourcePack:Botania
+[22:02:23] [Client thread/INFO]: Created: 512x512 textures/items-atlas
+[22:02:23] [Client thread/INFO]: Created: 1024x512 textures/blocks-atlas
+[22:02:24] [Sound Library Loader/INFO]: Sound engine started
+[22:02:49] [Server thread/INFO]: Starting integrated minecraft server version 1.7.10
+[22:02:49] [Server thread/INFO]: Generating keypair
+[22:02:50] [Server thread/INFO]: Preparing start region for level 0
+[22:02:51] [Server thread/INFO]: Changing view distance to 12, from 10
+[22:02:51] [Server thread/INFO]: Player234[local:E:d8b46687] logged in with entity id 311 at (-227.5, 70.0, 206.5)
+[22:02:51] [Server thread/INFO]: Player234 joined the game
+[22:02:53] [Server thread/INFO]: Player234 has just earned the achievement [Taking Inventory]
+[22:02:53] [Client thread/INFO]: [CHAT] Player234 has just earned the achievement [Taking Inventory]
+[22:15:55] [Client thread/INFO]: Stopping!
+[22:15:55] [Server thread/INFO]: Stopping server
+[22:15:55] [Server thread/INFO]: Saving players
+[22:15:55] [Server thread/INFO]: Saving worlds
+[22:15:55] [Server thread/INFO]: Saving chunks for level 'New World'/Overworld
+[22:15:55] [Server thread/INFO]: Saving chunks for level 'New World'/Nether
+[22:15:55] [Server thread/INFO]: Saving chunks for level 'New World'/The End
+[22:15:55] [Client Shutdown Thread/INFO]: Stopping server
+[22:15:55] [Client Shutdown Thread/INFO]: Saving players

@@ -21,7 +21,7 @@ public class AERuneAssembler extends BlockContainer {
     public AERuneAssembler() {
         super(Material.iron);
         setBlockName("AE Rune Assembler");
-        setCreativeTab(CreativeTabs.tabMisc);
+        setCreativeTab(BotanicEnergistics.botanicEnergisticsTab);
     }
 
     @Override

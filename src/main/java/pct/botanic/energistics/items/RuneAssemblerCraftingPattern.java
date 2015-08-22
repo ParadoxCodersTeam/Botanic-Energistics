@@ -4,6 +4,7 @@ import appeng.api.AEApi;
 import appeng.api.implementations.ICraftingPatternItem;
 import appeng.api.networking.crafting.ICraftingPatternDetails;
 import appeng.api.storage.data.IAEItemStack;
+import pct.botanic.energistics.BotanicEnergistics;
 import pct.botanic.energistics.utilities.RecipeChecker;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.InventoryCrafting;
@@ -20,7 +21,7 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
     ItemStack output;
 
     public RuneAssemblerCraftingPattern() {
-        setCreativeTab(CreativeTabs.tabMisc);
+        setCreativeTab(BotanicEnergistics.botanicEnergisticsTab);
         setMaxStackSize(64);
     }
 

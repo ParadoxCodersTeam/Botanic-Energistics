@@ -13,5 +13,6 @@ public class CoreRefs {
             + net.minecraftforge.common.ForgeVersion.minorVersion + '.' // minorVersion
             + net.minecraftforge.common.ForgeVersion.revisionVersion + '.' // revisionVersion
             + net.minecraftforge.common.ForgeVersion.buildVersion + ",)"; // buildVersion
+    public static final String CTAB = "bot.ae";
 
 }
