@@ -13,12 +13,13 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import vazkii.botania.api.BotaniaAPI;
+import vazkii.botania.api.mana.IManaReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class TileAERuneAssembler extends AENetworkTile implements ICraftingProviderHelper, IInventory {
+public class TileAERuneAssembler extends AENetworkTile implements ICraftingProviderHelper, IInventory, IManaReceiver {
     List RuneAltarRecipes = BotaniaAPI.runeAltarRecipes;
     private ItemStack[] inventory = new ItemStack[9];
     List availRecipes = new ArrayList();
@@ -43,18 +44,19 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
     }
 
     @TileEvent(TileEventType.TICK)
-    public void onTick(){
+    public void onTick() {
         availRecipes.clear();
-        for (ItemStack stack : inventory){
-            if (stack.getItem() instanceof RuneAssemblerCraftingPattern){
+        for (ItemStack stack : inventory) {
+            if (stack != null && stack.getItem() instanceof RuneAssemblerCraftingPattern) {
                 RuneAssemblerCraftingPattern pattern = (RuneAssemblerCraftingPattern) stack.getItem();
                 if (pattern.getOutputs() != null)
-                availRecipes.add(pattern.getOutputs()[0].getItemStack());
+                    availRecipes.add(pattern.getOutputs()[0].getItemStack());
             }
         }
     }
 
     //region IInventory
+
     /**
      * Returns the number of slots in the inventory.
      */
@@ -72,34 +74,27 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
     public ItemStack getStackInSlot(int slot) {
         return inventory[slot];
     }
-    public ItemStack decrStackSize(int slot, int decrAmount)
-    {
-        if (this.inventory[slot] != null)
-        {
+
+    public ItemStack decrStackSize(int slot, int decrAmount) {
+        if (this.inventory[slot] != null) {
             ItemStack itemstack;
 
-            if (this.inventory[slot].stackSize <= decrAmount)
-            {
+            if (this.inventory[slot].stackSize <= decrAmount) {
                 itemstack = this.inventory[slot];
                 this.inventory[slot] = null;
                 this.markDirty();
                 return itemstack;
-            }
-            else
-            {
+            } else {
                 itemstack = this.inventory[slot].splitStack(decrAmount);
 
-                if (this.inventory[slot].stackSize == 0)
-                {
+                if (this.inventory[slot].stackSize == 0) {
                     this.inventory[slot] = null;
                 }
 
                 this.markDirty();
                 return itemstack;
             }
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
@@ -108,16 +103,12 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
      * When some containers are closed they call this on each slot, then drop whatever it returns as an EntityItem -
      * like when you close a workbench GUI.
      */
-    public ItemStack getStackInSlotOnClosing(int slot)
-    {
-        if (this.inventory[slot] != null)
-        {
+    public ItemStack getStackInSlotOnClosing(int slot) {
+        if (this.inventory[slot] != null) {
             ItemStack itemstack = this.inventory[slot];
             this.inventory[slot] = null;
             return itemstack;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
@@ -125,12 +116,10 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
     /**
      * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
      */
-    public void setInventorySlotContents(int slot, ItemStack itemStack)
-    {
+    public void setInventorySlotContents(int slot, ItemStack itemStack) {
         this.inventory[slot] = itemStack;
 
-        if (itemStack != null && itemStack.stackSize > this.getInventoryStackLimit())
-        {
+        if (itemStack != null && itemStack.stackSize > this.getInventoryStackLimit()) {
             itemStack.stackSize = this.getInventoryStackLimit();
         }
 
@@ -168,7 +157,7 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
      */
     @Override
     public boolean isUseableByPlayer(EntityPlayer player) {
-        return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : player.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : player.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
     }
 
     @Override
@@ -191,5 +180,26 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         return true;
     }
+
+
     //endregion
+    @Override
+    public boolean isFull() {
+        return false;
+    }
+
+    @Override
+    public void recieveMana(int i) {
+
+    }
+
+    @Override
+    public boolean canRecieveManaFromBursts() {
+        return true;
+    }
+
+    @Override
+    public int getCurrentMana() {
+        return 0;
+    }
 }

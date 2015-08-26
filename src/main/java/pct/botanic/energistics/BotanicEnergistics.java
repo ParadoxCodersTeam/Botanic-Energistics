@@ -31,6 +31,7 @@ public class BotanicEnergistics {
         }
     };
 
+    @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
         BotanicEnergisticsBlocks.Register();
 

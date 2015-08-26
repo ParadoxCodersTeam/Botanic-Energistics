@@ -23,6 +23,7 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
     public RuneAssemblerCraftingPattern() {
         setCreativeTab(BotanicEnergistics.botanicEnergisticsTab);
         setMaxStackSize(64);
+        setUnlocalizedName("botanicpattern");
     }
 
     public RuneAssemblerCraftingPattern(ItemStack[] inputStacks, ItemStack output) {
