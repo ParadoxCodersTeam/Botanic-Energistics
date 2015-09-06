@@ -1,16 +1,22 @@
 package pct.botanic.energistics.gui.container;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.inventory.ICrafting;
 import pct.botanic.energistics.blocks.tile.TileAERuneAssembler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
+import java.util.List;
+
 /**
  * Created by beepbeat on 22.08.2015.
  */
 public class ContainerRuneAssembler extends ContainerCrossoverMod {
     TileAERuneAssembler te;
+    private int lastMana;
 
     public ContainerRuneAssembler(InventoryPlayer playerInventory, TileAERuneAssembler te){
         addPlayerSlots(playerInventory, 8, 84);
@@ -30,11 +36,34 @@ public class ContainerRuneAssembler extends ContainerCrossoverMod {
         addSlotToContainer(new Slot(te, 7, 98, 35));
         addSlotToContainer(new Slot(te, 8, 98, 17));
 
+        //output
+        addSlotToContainer(new Slot(te, 9, 132, 36));
+
+        //toCraft
+        addSlotToContainer(new Slot(te, 10, 132, 18));
+
         this.te = te;
     }
 
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+        if(lastMana != te.getCurrentMana()) {
+            for(ICrafting crafter : (List<ICrafting>)crafters) {
+                crafter.sendProgressBarUpdate(this, 0, te.getCurrentMana());
+            }
+            lastMana = te.getCurrentMana();
+        }
+    }
 
-
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void updateProgressBar(int id, int value){
+        super.updateProgressBar(id, value);
+        if(id == 0) {
+            te.setMana(value);
+        }
+    }
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {

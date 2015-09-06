@@ -2,6 +2,7 @@ package pct.botanic.energistics.blocks;
 
 import appeng.api.AEApi;
 import appeng.api.networking.IGridNode;
+import net.minecraft.util.ChatComponentText;
 import pct.botanic.energistics.BotanicEnergistics;
 import pct.botanic.energistics.gui.GUIHandler;
 import net.minecraft.block.BlockContainer;
@@ -70,4 +71,6 @@ public class AERuneAssembler extends BlockContainer {
         }
         return true;
     }
+
+
 }

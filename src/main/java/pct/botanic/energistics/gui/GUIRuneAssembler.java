@@ -4,6 +4,8 @@ import pct.botanic.energistics.blocks.tile.TileAERuneAssembler;
 import pct.botanic.energistics.gui.container.ContainerRuneAssembler;
 import net.minecraft.entity.player.InventoryPlayer;
 
+import java.util.logging.LogManager;
+
 /**
  * Created by beepbeat on 22.08.2015.
  */
@@ -18,7 +20,7 @@ public class GUIRuneAssembler extends GUICrossOver {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY){
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-
+        this.fontRendererObj.drawString("Mana: " + String.valueOf(te.getCurrentMana()), 10, 5, 0xFF444444);
     }
 
 }

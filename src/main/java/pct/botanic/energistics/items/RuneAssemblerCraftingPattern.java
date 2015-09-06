@@ -4,6 +4,8 @@ import appeng.api.AEApi;
 import appeng.api.implementations.ICraftingPatternItem;
 import appeng.api.networking.crafting.ICraftingPatternDetails;
 import appeng.api.storage.data.IAEItemStack;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import pct.botanic.energistics.BotanicEnergistics;
 import pct.botanic.energistics.utilities.RecipeChecker;
 import net.minecraft.creativetab.CreativeTabs;
@@ -24,6 +26,9 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
         setCreativeTab(BotanicEnergistics.botanicEnergisticsTab);
         setMaxStackSize(64);
         setUnlocalizedName("botanicpattern");
+        output = new ItemStack(Items.apple);
+        input = new ItemStack[9];
+        input[0] = new ItemStack(Items.record_11);
     }
 
     public RuneAssemblerCraftingPattern(ItemStack[] inputStacks, ItemStack output) {
@@ -52,6 +57,7 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
     public IAEItemStack[] getInputs() {
         //return new IAEItemStack[9];
         IAEItemStack[] AEStack = new IAEItemStack[9];
+        if (input == null) return AEStack;
         for (int i = 0, inputLength = input.length; i < inputLength; i++) {
             ItemStack stack = input[i];
             AEStack[i] =  AEApi.instance().storage().createItemStack(stack);

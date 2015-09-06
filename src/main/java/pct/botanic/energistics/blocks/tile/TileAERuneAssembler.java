@@ -7,30 +7,60 @@ import appeng.api.storage.data.IAEItemStack;
 import appeng.tile.TileEvent;
 import appeng.tile.events.TileEventType;
 import appeng.tile.grid.AENetworkTile;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
+import org.apache.logging.log4j.LogManager;
 import pct.botanic.energistics.items.RuneAssemblerCraftingPattern;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import pct.botanic.energistics.utilities.RecipeChecker;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.mana.IManaReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 
 public class TileAERuneAssembler extends AENetworkTile implements ICraftingProviderHelper, IInventory, IManaReceiver {
+
+    private boolean validRecipe;
+
+    public void setMana(int mana) {
+        this.currMana = mana;
+    }
+
+    private enum NBTKeys {storedMana}
     List RuneAltarRecipes = BotaniaAPI.runeAltarRecipes;
-    private ItemStack[] inventory = new ItemStack[9];
+    private ItemStack[] inventory = new ItemStack[11];
     List availRecipes = new ArrayList();
+    int currMana = 0, maxmana = 10000;
+
 
 
     public TileAERuneAssembler() {
         setName("runeassembler");
+        availRecipes.clear();
+        for (ItemStack stack : inventory) {
+            if (stack != null && stack.getItem() instanceof RuneAssemblerCraftingPattern) {
+                RuneAssemblerCraftingPattern pattern = (RuneAssemblerCraftingPattern) stack.getItem();
+                if (pattern.getOutputs() != null)
+                    availRecipes.add(pattern.getOutputs()[0].getItemStack());
+            }
+        }
     }
 
-    public TileAERuneAssembler(InventoryPlayer inventory, TileAERuneAssembler tileEntity) {
-
+    public TileAERuneAssembler(InventoryPlayer inventoryPlayer, TileAERuneAssembler tileEntity) {
+        availRecipes.clear();
+        for (ItemStack stack : inventory) {
+            if (stack != null && stack.getItem() instanceof RuneAssemblerCraftingPattern) {
+                RuneAssemblerCraftingPattern pattern = (RuneAssemblerCraftingPattern) stack.getItem();
+                if (pattern.getOutputs() != null)
+                    availRecipes.add(pattern.getOutputs()[0].getItemStack());
+            }
+        }
     }
 
     @Override
@@ -45,13 +75,21 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
 
     @TileEvent(TileEventType.TICK)
     public void onTick() {
-        availRecipes.clear();
-        for (ItemStack stack : inventory) {
-            if (stack != null && stack.getItem() instanceof RuneAssemblerCraftingPattern) {
-                RuneAssemblerCraftingPattern pattern = (RuneAssemblerCraftingPattern) stack.getItem();
-                if (pattern.getOutputs() != null)
-                    availRecipes.add(pattern.getOutputs()[0].getItemStack());
+        List<ItemStack> input = new ArrayList<ItemStack>();
+        for (int i = 0; i < 9; i++) {
+            ItemStack stack = inventory[i];
+            if (stack == null) continue;
+            input.add(stack);
+        }
+if (input.size() > 0 && inventory[10] != null)
+        validRecipe = RecipeChecker.isAltarRecipe(input.toArray(), inventory[10]);
+
+        if (validRecipe){
+            for (int i = 0; i < 9; i++){
+                inventory[i] = null;
             }
+            inventory[9] = inventory[10];
+            validRecipe = false;
         }
     }
 
@@ -76,6 +114,7 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
     }
 
     public ItemStack decrStackSize(int slot, int decrAmount) {
+
         if (this.inventory[slot] != null) {
             ItemStack itemstack;
 
@@ -131,7 +170,7 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
      */
     @Override
     public String getInventoryName() {
-        return "inv.EMCRAfter.name";
+        return "inv.RuneAssembler.name";
     }
 
     /**
@@ -177,7 +216,7 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
      * @param stack
      */
     @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    public boolean isItemValidForSlot(int slot, ItemStack stack){
         return true;
     }
 
@@ -185,21 +224,42 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
     //endregion
     @Override
     public boolean isFull() {
-        return false;
+        return currMana == maxmana;
     }
 
     @Override
     public void recieveMana(int i) {
-
+        if (isFull()) return;
+        currMana = currMana + i < maxmana ? currMana + i : maxmana;
     }
 
     @Override
     public boolean canRecieveManaFromBursts() {
-        return true;
+        return !isFull();
     }
 
     @Override
     public int getCurrentMana() {
-        return 0;
+        if (isFull())
+        return maxmana;
+        else return currMana;
+        //return 10;
     }
+
+    @TileEvent(TileEventType.WORLD_NBT_WRITE)
+    public void writeNBT(NBTTagCompound cmp){
+        cmp.setInteger(NBTKeys.storedMana.toString(), currMana);
+    }
+
+    @TileEvent(TileEventType.WORLD_NBT_READ)
+    public void readNBT(NBTTagCompound cmp){
+        currMana = cmp.getInteger(NBTKeys.storedMana.toString());
+    }
+
+
+
+
+
+
+
 }
