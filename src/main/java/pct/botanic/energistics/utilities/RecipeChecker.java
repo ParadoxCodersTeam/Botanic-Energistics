@@ -2,7 +2,9 @@ package pct.botanic.energistics.utilities;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.oredict.OreDictionary;
+import pct.botanic.energistics.blocks.tile.TileAERuneAssembler;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.recipe.RecipeRuneAltar;
 import vazkii.botania.common.item.ModItems;
@@ -27,7 +29,7 @@ public class RecipeChecker {
         return false;
     }
 
-    public static boolean isAltarRecipe(Object[] ObjInput, ItemStack output) {
+    public static boolean isAltarRecipe(Object[] ObjInput, ItemStack output, TileEntity te) {
         ItemStack stack;
         List Recipes = BotaniaAPI.runeAltarRecipes;
         List<Object> input = new ArrayList<Object>();
@@ -42,8 +44,10 @@ public class RecipeChecker {
             if (rec == null || rec.getInputs() == null || rec.getOutput() == null || output == null)
                 return false;
             output.stackSize = rec.getOutput().stackSize;
-            if (rec.getInputs().containsAll(input) && input.size() == rec.getInputs().size() /*&& rec.getOutput() == output*/)
+            if (rec.getInputs().containsAll(input) && input.size() == rec.getInputs().size() /*&& rec.getOutput() == output*/) {
+                if (te instanceof TileAERuneAssembler) ((TileAERuneAssembler) te).setManacost(rec.getManaUsage());
                 return true;
+            }
         }
         return false;
     }

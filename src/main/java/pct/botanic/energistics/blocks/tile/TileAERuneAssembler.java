@@ -7,6 +7,7 @@ import appeng.api.storage.data.IAEItemStack;
 import appeng.tile.TileEvent;
 import appeng.tile.events.TileEventType;
 import appeng.tile.grid.AENetworkTile;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import org.apache.logging.log4j.LogManager;
@@ -24,9 +25,10 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 
-public class TileAERuneAssembler extends AENetworkTile implements ICraftingProviderHelper, IInventory, IManaReceiver {
+public class TileAERuneAssembler extends AENetworkTile implements ICraftingProviderHelper, ISidedInventory, IManaReceiver {
 
     private boolean validRecipe;
+    private int manacost = 0;
 
     public void setMana(int mana) {
         this.currMana = mana;
@@ -37,6 +39,10 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
     private ItemStack[] inventory = new ItemStack[11];
     List availRecipes = new ArrayList();
     int currMana = 0, maxmana = 10000;
+
+    public void setManacost(int manacost){
+        this.manacost = manacost;
+    }
 
 
 
@@ -81,19 +87,20 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
             if (stack == null) continue;
             input.add(stack);
         }
-if (input.size() > 0 && inventory[10] != null)
-        validRecipe = RecipeChecker.isAltarRecipe(input.toArray(), inventory[10]);
+        if (input.size() > 0 && inventory[10] != null)
+        validRecipe = RecipeChecker.isAltarRecipe(input.toArray(), inventory[10], this);
 
-        if (validRecipe){
+        if (validRecipe && currMana >= manacost){
+            validRecipe = false;
             for (int i = 0; i < 9; i++){
                 inventory[i] = null;
             }
             inventory[9] = inventory[10];
-            validRecipe = false;
+            currMana -= manacost;
         }
     }
 
-    //region IInventory
+    //region ISidedInventory
 
     /**
      * Returns the number of slots in the inventory.
@@ -217,9 +224,23 @@ if (input.size() > 0 && inventory[10] != null)
      */
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack){
-        return true;
+        return slot != 10;
     }
 
+    @Override
+    public int[] getAccessibleSlotsFromSide(int p_94128_1_) {
+        return new int[]{0,1,2,3,4,5,6,7,8,9};
+    }
+
+    @Override
+    public boolean canInsertItem(int slot, ItemStack item, int side) {
+        return slot != 10;
+    }
+
+    @Override
+    public boolean canExtractItem(int slot, ItemStack item, int side) {
+        return slot != 10;
+    }
 
     //endregion
     @Override
@@ -255,11 +276,4 @@ if (input.size() > 0 && inventory[10] != null)
     public void readNBT(NBTTagCompound cmp){
         currMana = cmp.getInteger(NBTKeys.storedMana.toString());
     }
-
-
-
-
-
-
-
 }
