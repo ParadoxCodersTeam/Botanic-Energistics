@@ -1,5 +1,6 @@
 package pct.botanic.energistics.utilities;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -9,6 +10,7 @@ import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.recipe.RecipeRuneAltar;
 import vazkii.botania.common.item.ModItems;
 import vazkii.botania.common.item.material.ItemManaResource;
+import vazkii.botania.common.lib.LibOreDict;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +39,17 @@ public class RecipeChecker {
         for (Object obj0 : ObjInput) {
             if (obj0 instanceof ItemStack && ((ItemStack) obj0).isItemEqual(new ItemStack(ModItems.manaResource, 1, 0))) input.add("ingotManasteel");
             else if (obj0 instanceof ItemStack && ((ItemStack) obj0).isItemEqual(new ItemStack(ModItems.manaResource, 1, 1)))  input.add("manaPearl");
+            else if (obj0 instanceof ItemStack && ((ItemStack) obj0).isItemEqual(new ItemStack(ModItems.manaResource, 1, 2)))  input.add("manaDiamond");
+            else if (obj0 instanceof ItemStack && ((ItemStack) obj0).isItemEqual(new ItemStack(Blocks.stone)))  input.add("stone");
+            else if (obj0 instanceof ItemStack && ((ItemStack) obj0).isItemEqual(new ItemStack(Blocks.leaves)))  input.add("treeLeaves");
+
+            else if (obj0 instanceof ItemStack && ((ItemStack) obj0).getItem() ==  ModItems.rune) {
+                String[] rune = LibOreDict.RUNE;
+                for (int i = 0; i < rune.length; i++) {
+                    if (((ItemStack) obj0).isItemEqual(new ItemStack(ModItems.rune, 1, i)))
+                        input.add(LibOreDict.RUNE[i]);
+                }
+            }
             else if (obj0 instanceof ItemStack) input.add(obj0);
         }
         for (Object obj : Recipes) {
@@ -44,19 +57,16 @@ public class RecipeChecker {
             if (rec == null || rec.getInputs() == null || rec.getOutput() == null || output == null)
                 return false;
             output.stackSize = rec.getOutput().stackSize;
-            if (rec.getInputs().containsAll(input) && input.size() == rec.getInputs().size() /*&& rec.getOutput() == output*/) {
-                if (te instanceof TileAERuneAssembler) ((TileAERuneAssembler) te).setManacost(rec.getManaUsage());
+            boolean containsAll = true;
+            for (Object object : rec.getInputs()){
+              containsAll = containsAll && input.contains(object);
+            }
+            if (/*rec.getInputs().containsAll(input)*/ containsAll && input.size() == rec.getInputs().size() /*&& rec.getOutput() == output*/) {
+                if (te instanceof TileAERuneAssembler) ((TileAERuneAssembler) te).setManacost(rec.getManaUsage() * 2);
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean isAltarRecipe(IInventory inventory){
-        List Recipes = BotaniaAPI.runeAltarRecipes;
-        for (RecipeRuneAltar rec : (List<RecipeRuneAltar>) Recipes){
-            if (rec.matches(inventory)) return true;
-        }
-        return false;
-    }
 }

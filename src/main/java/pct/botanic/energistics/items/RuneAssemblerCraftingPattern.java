@@ -6,6 +6,7 @@ import appeng.api.networking.crafting.ICraftingPatternDetails;
 import appeng.api.storage.data.IAEItemStack;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraftforge.oredict.OreDictionary;
 import pct.botanic.energistics.BotanicEnergistics;
 import pct.botanic.energistics.utilities.RecipeChecker;
 import net.minecraft.creativetab.CreativeTabs;
@@ -33,6 +34,20 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
 
     public RuneAssemblerCraftingPattern(ItemStack[] inputStacks, ItemStack output) {
         this.input = inputStacks;
+        this.output = output;
+        setCreativeTab(CreativeTabs.tabMisc);
+        setMaxStackSize(64);
+    }
+
+    public RuneAssemblerCraftingPattern(Object[] inputStacks, ItemStack output) {
+        this.input = new ItemStack[inputStacks.length];
+        for (int i = 0; i < inputStacks.length; i++) {
+            Object obj = inputStacks[i];
+            if (obj instanceof ItemStack)
+                input[i] = (ItemStack) obj;
+            if (obj instanceof String)
+                input[i] = OreDictionary.getOres((String) obj).get(0);
+        }
         this.output = output;
         setCreativeTab(CreativeTabs.tabMisc);
         setMaxStackSize(64);

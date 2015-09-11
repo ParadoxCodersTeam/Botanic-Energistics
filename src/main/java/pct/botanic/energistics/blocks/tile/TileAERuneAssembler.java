@@ -2,12 +2,14 @@ package pct.botanic.energistics.blocks.tile;
 
 import appeng.api.networking.crafting.ICraftingMedium;
 import appeng.api.networking.crafting.ICraftingPatternDetails;
+import appeng.api.networking.crafting.ICraftingProvider;
 import appeng.api.networking.crafting.ICraftingProviderHelper;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.tile.TileEvent;
 import appeng.tile.events.TileEventType;
 import appeng.tile.grid.AENetworkTile;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import org.apache.logging.log4j.LogManager;
@@ -19,13 +21,14 @@ import net.minecraft.item.ItemStack;
 import pct.botanic.energistics.utilities.RecipeChecker;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.mana.IManaReceiver;
+import vazkii.botania.api.recipe.RecipeRuneAltar;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 
-public class TileAERuneAssembler extends AENetworkTile implements ICraftingProviderHelper, ISidedInventory, IManaReceiver {
+public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvider, ISidedInventory, IManaReceiver {
 
     private boolean validRecipe;
     private int manacost = 0;
@@ -38,7 +41,7 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
     List RuneAltarRecipes = BotaniaAPI.runeAltarRecipes;
     private ItemStack[] inventory = new ItemStack[11];
     List availRecipes = new ArrayList();
-    int currMana = 0, maxmana = 10000;
+    int currMana = 0, maxmana = 30000 /* 3*/;
 
     public void setManacost(int manacost){
         this.manacost = manacost;
@@ -70,13 +73,20 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
     }
 
     @Override
-    public void addCraftingOption(ICraftingMedium iCraftingMedium, ICraftingPatternDetails iCraftingPatternDetails) {
-
+    public void provideCrafting(ICraftingProviderHelper helper) {
+/*        for (RecipeRuneAltar rec : BotaniaAPI.runeAltarRecipes){
+            helper.addCraftingOption(this, new RuneAssemblerCraftingPattern(rec.getInputs().toArray(), rec.getOutput()));
+        }*/
     }
 
     @Override
-    public void setEmitable(IAEItemStack iaeItemStack) {
+    public boolean pushPattern(ICraftingPatternDetails iCraftingPatternDetails, InventoryCrafting inventoryCrafting) {
+        return false;
+    }
 
+    @Override
+    public boolean isBusy() {
+        return false;
     }
 
     @TileEvent(TileEventType.TICK)
