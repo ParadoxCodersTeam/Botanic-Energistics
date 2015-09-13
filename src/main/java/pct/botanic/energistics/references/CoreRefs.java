@@ -7,7 +7,7 @@ public class CoreRefs {
 
     public static final String NAME = "Botania-Energistics";
     public static final String MODID = "botaniaenergistics";
-    public static final String VERSIONS = "0.0.1";
+    public static final String VERSIONS = "0.2.3";
     public static final String DEPENDENCIES = "required-after:Forge@[" // require forge.
             + net.minecraftforge.common.ForgeVersion.majorVersion + '.' // majorVersion
             + net.minecraftforge.common.ForgeVersion.minorVersion + '.' // minorVersion
