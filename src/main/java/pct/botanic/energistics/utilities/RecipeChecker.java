@@ -57,11 +57,13 @@ public class RecipeChecker {
             if (rec == null || rec.getInputs() == null || rec.getOutput() == null || output == null)
                 return false;
             output.stackSize = rec.getOutput().stackSize;
-            boolean containsAll = true;
+/*            boolean containsAll = true;
             for (Object object : rec.getInputs()){
               containsAll = containsAll && input.contains(object);
-            }
-            if (/*rec.getInputs().containsAll(input)*/ containsAll && input.size() == rec.getInputs().size() /*&& rec.getOutput() == output*/) {
+            }*/
+            if (rec.getInputs().containsAll(input) && input.size() == rec.getInputs().size() /*&& rec.getOutput() == output*/)
+            //if (rec.getInputs().toString().contentEquals(input.toString()) )
+            {
                 if (te instanceof TileAERuneAssembler) ((TileAERuneAssembler) te).setManacost(rec.getManaUsage() * 2);
                 return true;
             }

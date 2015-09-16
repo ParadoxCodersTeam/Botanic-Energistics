@@ -1,34 +1,34 @@
 package pct.botanic.energistics.blocks.tile;
 
-import appeng.api.networking.crafting.ICraftingMedium;
+
 import appeng.api.networking.crafting.ICraftingPatternDetails;
 import appeng.api.networking.crafting.ICraftingProvider;
 import appeng.api.networking.crafting.ICraftingProviderHelper;
-import appeng.api.storage.data.IAEItemStack;
 import appeng.tile.TileEvent;
 import appeng.tile.events.TileEventType;
 import appeng.tile.grid.AENetworkTile;
+import cpw.mods.fml.common.registry.GameData;
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
-import org.apache.logging.log4j.LogManager;
+import net.minecraft.nbt.NBTTagList;
 import pct.botanic.energistics.items.RuneAssemblerCraftingPattern;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import pct.botanic.energistics.utilities.RecipeChecker;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.mana.IManaReceiver;
-import vazkii.botania.api.recipe.RecipeRuneAltar;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
+
 
 
 public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvider, ISidedInventory, IManaReceiver {
+
 
     private boolean validRecipe;
     private int manacost = 0;
@@ -37,7 +37,7 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
         this.currMana = mana;
     }
 
-    private enum NBTKeys {storedMana}
+    private enum NBTKeys {storedMana, inventory, amount, item, metadata, nbt}
     List RuneAltarRecipes = BotaniaAPI.runeAltarRecipes;
     private ItemStack[] inventory = new ItemStack[11];
     List availRecipes = new ArrayList();
@@ -105,7 +105,7 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
             for (int i = 0; i < 9; i++){
                 inventory[i] = null;
             }
-            inventory[9] = inventory[10];
+            inventory[9] = inventory[10].copy();
             currMana -= manacost;
         }
     }
@@ -244,12 +244,12 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
 
     @Override
     public boolean canInsertItem(int slot, ItemStack item, int side) {
-        return slot != 10;
+        return true;
     }
 
     @Override
     public boolean canExtractItem(int slot, ItemStack item, int side) {
-        return slot != 10;
+        return true;
     }
 
     //endregion
@@ -280,10 +280,37 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
     @TileEvent(TileEventType.WORLD_NBT_WRITE)
     public void writeNBT(NBTTagCompound cmp){
         cmp.setInteger(NBTKeys.storedMana.toString(), currMana);
+        NBTTagCompound inv = new NBTTagCompound();
+        for (int i = 0; i < inventory.length; i++){
+            if (inventory[i] == null) continue;
+            NBTTagCompound slot = new NBTTagCompound();
+            slot.setInteger(NBTKeys.amount.toString(), inventory[i].stackSize);
+            slot.setString(NBTKeys.item.toString(), GameData.getItemRegistry().getNameForObject(inventory[i].getItem()));
+            slot.setInteger(NBTKeys.metadata.toString(), inventory[i].getItemDamage());
+            if (inventory[i].hasTagCompound())
+                slot.setString(NBTKeys.nbt.toString(), inventory[i].getTagCompound().toString());
+            else
+                slot.setString(NBTKeys.nbt.toString(), "");
+            inv.setTag("#" + i, slot);
+        }
+        cmp.setTag(NBTKeys.inventory.toString(), inv);
+
+
     }
 
     @TileEvent(TileEventType.WORLD_NBT_READ)
     public void readNBT(NBTTagCompound cmp){
         currMana = cmp.getInteger(NBTKeys.storedMana.toString());
+        NBTTagCompound inv = cmp.getCompoundTag(NBTKeys.inventory.toString());
+        for (int i = 0; i < inventory.length; i++){
+            if (!inv.hasKey("#" + i)) continue;
+            if (inv.getCompoundTag("#" + i) == null) continue;
+            NBTTagCompound slot = inv.getCompoundTag("#" + i);
+            inventory[i] = GameRegistry.makeItemStack(slot.getString(NBTKeys.item.toString()), slot.getInteger(NBTKeys.metadata.toString()), slot.getInteger(NBTKeys.amount.toString()), slot.getString(NBTKeys.nbt.toString()));
+            //inventory[i].stackSize = 1; //slot.getInteger(NBTKeys.amount.toString());
+          //  slot.setString(NBTKeys.item.toString(), inventory[i].getUnlocalizedName());
+            //inventory[i] = new ItemStack(Block.getBlockFromName(slot.getString(NBTKeys.item.toString())));
+           // inv.setTag("#" + i, slot);
+        }
     }
 }
