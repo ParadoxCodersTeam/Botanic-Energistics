@@ -114,6 +114,7 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
             }
             inventory[9] = inventory[10].copy();
             currMana -= manacost;
+            inventory[10].stackSize = 1;
         }
 
         List<EntityManaBurst> entities = this.getWorldObj().getEntitiesWithinAABB(EntityManaBurst.class, AxisAlignedBB.getBoundingBox(xCoord - 2, yCoord - 2, zCoord - 2, xCoord + 3, yCoord + 3, zCoord + 3));
