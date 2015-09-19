@@ -10,17 +10,24 @@ import appeng.tile.grid.AENetworkTile;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChunkCoordinates;
 import pct.botanic.energistics.items.RuneAssemblerCraftingPattern;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import pct.botanic.energistics.utilities.RecipeChecker;
 import vazkii.botania.api.BotaniaAPI;
+import vazkii.botania.api.internal.IManaBurst;
 import vazkii.botania.api.mana.IManaReceiver;
+import vazkii.botania.common.block.tile.mana.TileSpreader;
+import vazkii.botania.common.entity.EntityManaBurst;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,6 +114,20 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
             }
             inventory[9] = inventory[10].copy();
             currMana -= manacost;
+        }
+
+        List<EntityManaBurst> entities = this.getWorldObj().getEntitiesWithinAABB(EntityManaBurst.class, AxisAlignedBB.getBoundingBox(xCoord - 2, yCoord - 2, zCoord - 2, xCoord + 3, yCoord + 3, zCoord + 3));
+        for (EntityManaBurst manaBurst : entities){
+            ChunkCoordinates coord = manaBurst.getBurstSourceChunkCoordinates();
+            TileEntity te = this.worldObj.getTileEntity(coord.posX, coord.posY, coord.posZ);
+            if (te instanceof TileSpreader){
+                ChunkCoordinates boundpos = ((TileSpreader) te).getBinding();
+                if (boundpos == null) return;
+                TileEntity boundtile = this.worldObj.getTileEntity(boundpos.posX, boundpos.posY, boundpos.posZ);
+                if (boundtile != null && boundtile.xCoord == this.xCoord && boundtile.yCoord == this.yCoord && boundtile.zCoord == this.zCoord){
+                    if (!((TileSpreader) te).isULTRA_SPREADER()){ manaBurst.setDead(); }
+                }
+            }
         }
     }
 
@@ -271,9 +292,7 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
 
     @Override
     public int getCurrentMana() {
-        if (isFull())
-        return maxmana;
-        else return currMana;
+         return currMana;
         //return 10;
     }
 

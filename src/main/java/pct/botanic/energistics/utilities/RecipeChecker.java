@@ -1,7 +1,9 @@
 package pct.botanic.energistics.utilities;
 
+import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.oredict.OreDictionary;
@@ -12,9 +14,7 @@ import vazkii.botania.common.item.ModItems;
 import vazkii.botania.common.item.material.ItemManaResource;
 import vazkii.botania.common.lib.LibOreDict;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by beepbeat on 22.08.2015.
@@ -56,19 +56,76 @@ public class RecipeChecker {
             RecipeRuneAltar rec = (RecipeRuneAltar) obj;
             if (rec == null || rec.getInputs() == null || rec.getOutput() == null || output == null)
                 return false;
-            output.stackSize = rec.getOutput().stackSize;
 /*            boolean containsAll = true;
             for (Object object : rec.getInputs()){
-              containsAll = containsAll && input.contains(object);
+              for (Object object2 : input){
+
+                  if (object instanceof String && object2 instanceof String && ((String) object).equalsIgnoreCase((String) object2)){
+                      containsAll = true;
+                      break;}
+
+                  if (object instanceof ItemStack && object2 instanceof ItemStack){
+                      ItemStack is = (ItemStack) object;
+                      ItemStack is2 = (ItemStack) object2;
+                      *//*containsAll = containsAll && (is.getItem() == is2.getItem());
+                      break;*//*
+                      containsAll = GameData.getItemRegistry().getNameForObject(is.getItem()).equalsIgnoreCase(GameData.getItemRegistry().getNameForObject(is2.getItem()));
+
+                  }
+                  //containsAll = containsAll && false;
+
+    //break;
+              }
+                containsAll = false;
             }*/
-            if (rec.getInputs().containsAll(input) && input.size() == rec.getInputs().size() /*&& rec.getOutput() == output*/)
-            //if (rec.getInputs().toString().contentEquals(input.toString()) )
-            {
+            output.stackSize = rec.getOutput().stackSize;
+            if (containsAllItems(input, rec.getInputs()) && input.size() == rec.getInputs().size() && rec.getOutput().isItemEqual(output)){
                 if (te instanceof TileAERuneAssembler) ((TileAERuneAssembler) te).setManacost(rec.getManaUsage() * 2);
                 return true;
             }
         }
         return false;
     }
+
+
+    public static boolean ItemStackEqual(ItemStack is1, ItemStack is2){
+        return GameData.getItemRegistry().getNameForObject(is1.getItem()).equalsIgnoreCase(GameData.getItemRegistry().getNameForObject(is2.getItem()));
+    }
+
+
+    public static boolean containsAllItems(List<Object> collection1, List<Object> collection2){
+/*        boolean bool = false;
+        for (Object a : collection1){
+            for (Object b: collection2){
+                if (a instanceof String && b instanceof String) bool = ((String) a).equalsIgnoreCase((String) b);
+
+                if (a instanceof ItemStack && b instanceof ItemStack){
+                    bool = (ItemStackEqual((ItemStack) a, (ItemStack) b));
+                }
+
+            }
+        }
+    return bool;*/
+
+        for (int i = 0; i < collection1.size(); i++) {
+            Object o = collection1.get(i);
+            if (o instanceof String) continue;
+            if (o instanceof ItemStack) {
+                Item tmp = ((ItemStack) o).getItem();
+                collection1.set(i, GameData.getItemRegistry().getNameForObject(tmp));
+            }
+        }
+
+        for (int i = 0; i < collection2.size(); i++) {
+            Object o = collection2.get(i);
+            if (o instanceof String) continue;
+            if (o instanceof ItemStack) {
+                Item tmp = ((ItemStack) o).getItem();
+                collection2.set(i, GameData.getItemRegistry().getNameForObject(tmp));
+            }
+        }
+        return collection1.containsAll(collection2);
+    }
+
 
 }
