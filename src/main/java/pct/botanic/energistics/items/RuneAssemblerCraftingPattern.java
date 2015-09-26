@@ -15,6 +15,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by beepbeat on 22.08.2015.
  */
@@ -35,7 +38,7 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
     public RuneAssemblerCraftingPattern(ItemStack[] inputStacks, ItemStack output) {
         this.input = inputStacks;
         this.output = output;
-        setCreativeTab(CreativeTabs.tabMisc);
+        setCreativeTab(BotanicEnergistics.botanicEnergisticsTab);
         setMaxStackSize(64);
     }
 
@@ -49,7 +52,7 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
                 input[i] = OreDictionary.getOres((String) obj).get(0);
         }
         this.output = output;
-        setCreativeTab(CreativeTabs.tabMisc);
+        setCreativeTab(BotanicEnergistics.botanicEnergisticsTab);
         setMaxStackSize(64);
     }
 
@@ -82,12 +85,24 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
 
     @Override
     public IAEItemStack[] getCondensedInputs() {
-        return new IAEItemStack[0];
+        List<IAEItemStack> AEStack = new ArrayList<IAEItemStack>();
+        if (input == null) return (IAEItemStack[]) AEStack.toArray();
+        for (int i = 0, inputLength = input.length; i < inputLength; i++) {
+            ItemStack stack = input[i];
+            AEStack.add(AEApi.instance().storage().createItemStack(stack));
+        }
+        return (IAEItemStack[]) AEStack.toArray();
+
     }
 
     @Override
     public IAEItemStack[] getCondensedOutputs() {
-        return new IAEItemStack[0];
+        if (!isCraftable()){
+            return null;
+        }
+   List<IAEItemStack> stack = new ArrayList<IAEItemStack>();
+        stack.add(AEApi.instance().storage().createItemStack(output));
+        return (IAEItemStack[]) stack.toArray();
     }
 
     @Override

@@ -1,9 +1,14 @@
 package pct.botanic.energistics.blocks.tile;
 
 
+import appeng.api.AEApi;
+import appeng.api.config.Actionable;
 import appeng.api.networking.crafting.ICraftingPatternDetails;
 import appeng.api.networking.crafting.ICraftingProvider;
 import appeng.api.networking.crafting.ICraftingProviderHelper;
+import appeng.api.networking.security.BaseActionSource;
+import appeng.api.networking.security.MachineSource;
+import appeng.me.GridAccessException;
 import appeng.tile.TileEvent;
 import appeng.tile.events.TileEventType;
 import appeng.tile.grid.AENetworkTile;
@@ -26,6 +31,7 @@ import pct.botanic.energistics.utilities.RecipeChecker;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.internal.IManaBurst;
 import vazkii.botania.api.mana.IManaReceiver;
+import vazkii.botania.api.recipe.RecipeRuneAltar;
 import vazkii.botania.common.block.tile.mana.TileSpreader;
 import vazkii.botania.common.entity.EntityManaBurst;
 
@@ -39,6 +45,8 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
 
     private boolean validRecipe;
     private int manacost = 0;
+    private ItemStack output;
+
 
     public void setMana(int mana) {
         this.currMana = mana;
@@ -81,13 +89,17 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
 
     @Override
     public void provideCrafting(ICraftingProviderHelper helper) {
-/*        for (RecipeRuneAltar rec : BotaniaAPI.runeAltarRecipes){
-            helper.addCraftingOption(this, new RuneAssemblerCraftingPattern(rec.getInputs().toArray(), rec.getOutput()));
-        }*/
+        List<RecipeRuneAltar> recipes = BotaniaAPI.runeAltarRecipes;
+        for (RecipeRuneAltar rec : recipes){
+            helper.addCraftingOption(this,new RuneAssemblerCraftingPattern(rec.getInputs().toArray(), rec.getOutput()));
+        }
     }
 
     @Override
     public boolean pushPattern(ICraftingPatternDetails iCraftingPatternDetails, InventoryCrafting inventoryCrafting) {
+        if (iCraftingPatternDetails instanceof RuneAssemblerCraftingPattern){
+
+        }
         return false;
     }
 
@@ -98,12 +110,17 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
 
     @TileEvent(TileEventType.TICK)
     public void onTick() {
+        int initialStacksizeSlot10 = -1;
+        if (inventory[10] != null) {
+            initialStacksizeSlot10 = inventory[10].stackSize;
+        }
         List<ItemStack> input = new ArrayList<ItemStack>();
         for (int i = 0; i < 9; i++) {
             ItemStack stack = inventory[i];
             if (stack == null) continue;
             input.add(stack);
         }
+/*      De-Implemented for actual AE-based crafting loop. may be reimplented later
         if (input.size() > 0 && inventory[10] != null)
         validRecipe = RecipeChecker.isAltarRecipe(input.toArray(), inventory[10], this);
 
@@ -114,23 +131,45 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
             }
             inventory[9] = inventory[10].copy();
             currMana -= manacost;
-            inventory[10].stackSize = 1;
+            if (initialStacksizeSlot10 != -1)
+            inventory[10].stackSize = initialStacksizeSlot10;
+        }*/
+
+        if (input.size() > 0 && inventory[10] != null)
+            validRecipe = RecipeChecker.isAltarRecipe(input.toArray(), inventory[10], this);
+
+        if (validRecipe && currMana >= manacost) {
+            validRecipe = false;
+            for (int i = 0; i < 9; i++) {
+                inventory[i] = null;
+            }
+            //inventory[9] = inventory[10].copy();
+            try {
+                this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(inventory[10].copy()), Actionable.MODULATE, new MachineSource(this));
+            } catch (GridAccessException e) {
+                //
+            }
+            currMana -= manacost;
+            if (initialStacksizeSlot10 != -1)
+                inventory[10].stackSize = initialStacksizeSlot10;
         }
 
-        List<EntityManaBurst> entities = this.getWorldObj().getEntitiesWithinAABB(EntityManaBurst.class, AxisAlignedBB.getBoundingBox(xCoord - 2, yCoord - 2, zCoord - 2, xCoord + 3, yCoord + 3, zCoord + 3));
-        for (EntityManaBurst manaBurst : entities){
-            ChunkCoordinates coord = manaBurst.getBurstSourceChunkCoordinates();
-            TileEntity te = this.worldObj.getTileEntity(coord.posX, coord.posY, coord.posZ);
-            if (te instanceof TileSpreader){
-                ChunkCoordinates boundpos = ((TileSpreader) te).getBinding();
-                if (boundpos == null) return;
-                TileEntity boundtile = this.worldObj.getTileEntity(boundpos.posX, boundpos.posY, boundpos.posZ);
-                if (boundtile != null && boundtile.xCoord == this.xCoord && boundtile.yCoord == this.yCoord && boundtile.zCoord == this.zCoord){
-                    if (!((TileSpreader) te).isULTRA_SPREADER()){ manaBurst.setDead(); }
+            List<EntityManaBurst> entities = this.getWorldObj().getEntitiesWithinAABB(EntityManaBurst.class, AxisAlignedBB.getBoundingBox(xCoord - 2, yCoord - 2, zCoord - 2, xCoord + 3, yCoord + 3, zCoord + 3));
+            for (EntityManaBurst manaBurst : entities) {
+                ChunkCoordinates coord = manaBurst.getBurstSourceChunkCoordinates();
+                TileEntity te = this.worldObj.getTileEntity(coord.posX, coord.posY, coord.posZ);
+                if (te instanceof TileSpreader) {
+                    ChunkCoordinates boundpos = ((TileSpreader) te).getBinding();
+                    if (boundpos == null) return;
+                    TileEntity boundtile = this.worldObj.getTileEntity(boundpos.posX, boundpos.posY, boundpos.posZ);
+                    if (boundtile != null && boundtile.xCoord == this.xCoord && boundtile.yCoord == this.yCoord && boundtile.zCoord == this.zCoord) {
+                        if (!((TileSpreader) te).isULTRA_SPREADER()) {
+                            manaBurst.setDead();
+                        }
+                    }
                 }
             }
         }
-    }
 
     //region ISidedInventory
 
