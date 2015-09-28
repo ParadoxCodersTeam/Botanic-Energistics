@@ -1,6 +1,7 @@
 package pct.botanic.energistics;
 
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -12,6 +13,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import pct.botanic.energistics.blocks.BotanicEnergisticsBlocks;
 import pct.botanic.energistics.items.BotanicEnergisticsItems;
+import pct.botanic.energistics.proxies.CommonProxy;
 import pct.botanic.energistics.references.CoreRefs;
 
 /**
@@ -22,7 +24,10 @@ public class BotanicEnergistics {
 
     @Mod.Instance()
     public static BotanicEnergistics instance;
-
+    
+    @SidedProxy(clientSide="pct.botanic.energistics.proxies.ClientProxy", serverSide="pct.botanic.energistics.proxies.CommonProxy")
+    public static CommonProxy proxy;
+    
     public static final CreativeTabs botanicEnergisticsTab = new CreativeTabs(CoreRefs.CTAB) {
         @Override
         @SideOnly(Side.CLIENT)
@@ -40,12 +45,14 @@ public class BotanicEnergistics {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new pct.botanic.energistics.gui.GUIHandler());
     }
 
+    @Mod.EventHandler
     public static void init(FMLInitializationEvent event){
-
+    	proxy.registerRenderers();
     }
 
+    @Mod.EventHandler
     public static void postInit(FMLPostInitializationEvent event){
-
+    	
     }
 
 }
