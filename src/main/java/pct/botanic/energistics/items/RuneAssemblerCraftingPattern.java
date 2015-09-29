@@ -68,7 +68,8 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
 
     @Override
     public boolean isCraftable() {
-        return RecipeChecker.isAltarRecipe(input, output);
+        //return RecipeChecker.isAltarRecipe(input, output);
+        return true;
     }
 
     @Override
@@ -91,7 +92,8 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
             ItemStack stack = input[i];
             AEStack.add(AEApi.instance().storage().createItemStack(stack));
         }
-        return (IAEItemStack[]) AEStack.toArray();
+        //return (IAEItemStack[]) AEStack.toArray();
+        return AEStack.toArray(new IAEItemStack[AEStack.size()]);
 
     }
 
@@ -102,7 +104,9 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
         }
    List<IAEItemStack> stack = new ArrayList<IAEItemStack>();
         stack.add(AEApi.instance().storage().createItemStack(output));
-        return (IAEItemStack[]) stack.toArray();
+        IAEItemStack result = AEApi.instance().storage().createItemStack(output);
+        //return (IAEItemStack[]) stack.toArray();
+        return new IAEItemStack[] {result};
     }
 
     @Override
@@ -117,7 +121,7 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
 
     @Override
     public boolean canSubstitute() {
-        return false;
+        return true;
     }
 
     @Override
@@ -142,4 +146,6 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
     public ICraftingPatternDetails getPatternForItem(ItemStack itemStack, World world) {
         return new RuneAssemblerCraftingPattern(null,itemStack);
     }
+
+
 }
