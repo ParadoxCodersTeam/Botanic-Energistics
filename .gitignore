@@ -7,12 +7,12 @@
 bin/
 
 ## eclipse
-/eclipse
-/.settings
-/.metadata
-/.classpath
-/.project
+eclipse/
+.settings/
+.classpath
+.project
 /bin
+options.txt
 
 ## intellij
 /out
@@ -21,3 +21,9 @@ bin/
 /*.ipr
 /*.iws
 /atlassian-ide-plugin.xml
+saves/
+logs/
+config/
+crash-reports/
+BotaniaVars.dat
+usernamecache.json
