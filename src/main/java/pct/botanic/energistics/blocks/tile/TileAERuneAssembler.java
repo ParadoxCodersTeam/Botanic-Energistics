@@ -16,6 +16,7 @@ import appeng.tile.events.TileEventType;
 import appeng.tile.grid.AENetworkTile;
 import appeng.util.item.AEItemStack;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -23,6 +24,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -41,7 +43,9 @@ import vazkii.botania.api.internal.IManaBurst;
 import vazkii.botania.api.mana.IManaReceiver;
 import vazkii.botania.api.recipe.RecipeRuneAltar;
 import vazkii.botania.common.block.tile.mana.TileSpreader;
+import vazkii.botania.common.crafting.recipe.HeadRecipe;
 import vazkii.botania.common.entity.EntityManaBurst;
+import vazkii.botania.common.item.ModItems;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -86,25 +90,22 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
         }
         if(FMLCommonHandler.instance().getEffectiveSide().isServer()) {
             this.gridProxy.setFlags(GridFlags.REQUIRE_CHANNEL);
+            gridProxy.setIdlePowerUsage(0.5D);
         }
     }
 
     public TileAERuneAssembler(InventoryPlayer inventoryPlayer, TileAERuneAssembler tileEntity) {
-        availRecipes.clear();
-        for (ItemStack stack : inventory) {
-            if (stack != null && stack.getItem() instanceof RuneAssemblerCraftingPattern) {
-                RuneAssemblerCraftingPattern pattern = (RuneAssemblerCraftingPattern) stack.getItem();
-                if (pattern.getOutputs() != null)
-                    availRecipes.add(pattern.getOutputs()[0].getItemStack());
-            }
-        }
+        this();
     }
 
     @Override
     public void provideCrafting(ICraftingProviderHelper helper) {
         List<RecipeRuneAltar> recipes = BotaniaAPI.runeAltarRecipes;
         for (RecipeRuneAltar rec : recipes){
-            helper.addCraftingOption(this,new RuneAssemblerCraftingPattern(rec.getInputs().toArray(), rec.getOutput()));
+            if (rec instanceof HeadRecipe) continue;
+            //if (rec.getOutput().getItem() == ModItems.rune && rec.getOutput().getItemDamage() == 3 && !rec.getInputs().contains(new ItemStack(Blocks.carpet, 1, 0))) continue;
+
+            helper.addCraftingOption(this, new RuneAssemblerCraftingPattern(rec.getInputs().toArray(), rec.getOutput()));
         }
     }
 
@@ -115,7 +116,7 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
             inputs = iCraftingPatternDetails.getInputs();
             return true;
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -176,17 +177,19 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
         }
         */
 
-        if (inputs.length > 0 && output != null)
+        if (inputs.length > 0 && output != null) {
+            Object[] inputs2 = new Object[inputs.length];
+            for (int i = 0; i < inputs.length;i++){
+                inputs2[i] = (Object) inputs[i];
+            }
             validRecipe = RecipeChecker.isAltarRecipe(inputs, output, this);
+        }
 
         if (validRecipe && currMana >= manacost) {
             validRecipe = false;
-            for (int i = 0; i < 9; i++) {
-                inventory[i] = null;
-            }
             //inventory[9] = inventory[10].copy();
             try {
-                if (this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(inventory[10].copy()), Actionable.SIMULATE, new MachineSource(this)) == null) return;
+                //if (this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(inventory[10].copy()), Actionable.SIMULATE, new MachineSource(this)) == null) return;
                 this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(inventory[10].copy()), Actionable.MODULATE, new MachineSource(this));
                 for (int i = 0; i < inputs.length; i++) {
                     inputs[i] = null;

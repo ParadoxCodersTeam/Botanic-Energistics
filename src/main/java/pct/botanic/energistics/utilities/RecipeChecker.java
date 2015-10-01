@@ -1,5 +1,7 @@
 package pct.botanic.energistics.utilities;
 
+import appeng.api.storage.data.IAEItemStack;
+import appeng.util.item.AEStack;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -75,6 +77,14 @@ public class RecipeChecker {
             }
         }
         return false;
+    }
+
+    public static boolean isAltarRecipe(IAEItemStack[] AEStacks, ItemStack output, TileEntity te){
+        List<ItemStack> stacks = new ArrayList<ItemStack>();
+        for (IAEItemStack stack : AEStacks){
+            stacks.add(stack.getItemStack());
+        }
+        return isAltarRecipe(stacks.toArray(), output, te);
     }
 
 

@@ -63,7 +63,7 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
 
     @Override
     public boolean isValidItemForSlot(int i, ItemStack itemStack, World world) {
-        return false;
+        return true;
     }
 
     @Override
