@@ -7,6 +7,8 @@ import appeng.api.networking.GridFlags;
 import appeng.api.networking.crafting.ICraftingPatternDetails;
 import appeng.api.networking.crafting.ICraftingProvider;
 import appeng.api.networking.crafting.ICraftingProviderHelper;
+import appeng.api.networking.events.MENetworkCraftingPatternChange;
+import appeng.api.networking.events.MENetworkEventSubscribe;
 import appeng.api.networking.security.BaseActionSource;
 import appeng.api.networking.security.MachineSource;
 import appeng.api.storage.data.IAEItemStack;
@@ -103,7 +105,34 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
         List<RecipeRuneAltar> recipes = BotaniaAPI.runeAltarRecipes;
         for (RecipeRuneAltar rec : recipes){
             if (rec instanceof HeadRecipe) continue;
-            //if (rec.getOutput().getItem() == ModItems.rune && rec.getOutput().getItemDamage() == 3 && !rec.getInputs().contains(new ItemStack(Blocks.carpet, 1, 0))) continue;
+            //if (rec.getOutput().isItemEqual(new ItemStack(ModItems.rune, 1, 3)) && !rec.getInputs().contains(new ItemStack(Blocks.carpet, 1, 0))) continue;
+            if (rec.getOutput().isItemEqual(new ItemStack(ModItems.rune, 1, 3))){
+                List<Object> tmp = new ArrayList<Object>();
+                for (Object obj: rec.getInputs()){
+                    if (obj instanceof ItemStack && ((ItemStack) obj).getItem() == Item.getItemFromBlock(Blocks.carpet)){
+                        tmp.add(new ItemStack(Blocks.carpet,1 ,0));
+                    }
+                    else{
+                        tmp.add(obj);
+                    }
+                }
+                helper.addCraftingOption(this, new RuneAssemblerCraftingPattern(tmp.toArray(), rec.getOutput()));
+                continue;
+            }
+
+            if (rec.getOutput().isItemEqual(new ItemStack(ModItems.rune, 1, 7))){
+                List<Object> tmp = new ArrayList<Object>();
+                for (Object obj: rec.getInputs()){
+                    if (obj instanceof ItemStack && ((ItemStack) obj).getItem() == Item.getItemFromBlock(Blocks.wool)){
+                        tmp.add(new ItemStack(Blocks.wool,1 ,0));
+                    }
+                    else{
+                        tmp.add(obj);
+                    }
+                }
+                helper.addCraftingOption(this, new RuneAssemblerCraftingPattern(tmp.toArray(), rec.getOutput()));
+                continue;
+            }
 
             helper.addCraftingOption(this, new RuneAssemblerCraftingPattern(rec.getInputs().toArray(), rec.getOutput()));
         }
@@ -190,12 +219,16 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
             //inventory[9] = inventory[10].copy();
             try {
                 //if (this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(inventory[10].copy()), Actionable.SIMULATE, new MachineSource(this)) == null) return;
-                this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(inventory[10].copy()), Actionable.MODULATE, new MachineSource(this));
-                for (int i = 0; i < inputs.length; i++) {
-                    inputs[i] = null;
-                    currMana -= manacost;
-                    output = null;
+                this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(output.copy()), Actionable.MODULATE, new MachineSource(this));
+                if (!getProxy().getCrafting().isRequesting(AEApi.instance().storage().createItemStack(output))){
+                    for (int i = 0; i < inputs.length; i++) {
+                         inputs[i] = null;
+                         output = null;
+                    }
                 }
+
+                currMana -= manacost;
+
             } catch (GridAccessException e) {
                 //
             }
@@ -406,4 +439,6 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
            // inv.setTag("#" + i, slot);
         }
     }
+
+
 }

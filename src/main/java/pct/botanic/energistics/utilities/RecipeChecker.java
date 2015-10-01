@@ -82,7 +82,9 @@ public class RecipeChecker {
     public static boolean isAltarRecipe(IAEItemStack[] AEStacks, ItemStack output, TileEntity te){
         List<ItemStack> stacks = new ArrayList<ItemStack>();
         for (IAEItemStack stack : AEStacks){
-            stacks.add(stack.getItemStack());
+            if (stack != null) {
+                stacks.add(stack.getItemStack());
+            }
         }
         return isAltarRecipe(stacks.toArray(), output, te);
     }
