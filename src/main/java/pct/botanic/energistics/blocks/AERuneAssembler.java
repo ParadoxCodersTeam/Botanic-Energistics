@@ -15,14 +15,22 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import pct.botanic.energistics.blocks.tile.TileAERuneAssembler;
+import pct.botanic.energistics.utilities.LexionEntryHelper;
+import vazkii.botania.api.BotaniaAPI;
+import vazkii.botania.api.lexicon.ILexiconable;
+import vazkii.botania.api.lexicon.LexiconEntry;
+import vazkii.botania.api.lexicon.LexiconPage;
+import vazkii.botania.common.lexicon.page.PageText;
 
 
-public class AERuneAssembler extends BlockContainer {
+public class AERuneAssembler extends BlockContainer implements ILexiconable{
+
 
     public AERuneAssembler() {
         super(Material.iron);
         setBlockName("AE Rune Assembler");
-        setCreativeTab(BotanicEnergistics.botanicEnergisticsTab);;
+        setCreativeTab(BotanicEnergistics.botanicEnergisticsTab);
+
     }
 
     @Override
@@ -72,5 +80,17 @@ public class AERuneAssembler extends BlockContainer {
         return true;
     }
 
+    @Override
+    public LexiconEntry getEntry(World world, int i, int i1, int i2, EntityPlayer entityPlayer, ItemStack itemStack) {
+        LexiconEntry entry = new LexionEntryHelper.runicKnowledgeEntry("entry.runeAssembler", BotaniaAPI.categoryDevices);
+        //entry.addPage(LexionEntryHelper.LexiconPageCreator.createTextPage("page.runeassembler", 10, 10, 10, 12, "THIS IS A TEST TEXT!!!"));
+        entry.addPage(new PageText("page.runeassembler"));
+        return entry;
+    }
 
+    public LexiconEntry getEntry() {
+        LexiconEntry entry = new LexionEntryHelper.elvenKnowledgeEntry("entry.runeAssembler", BotaniaAPI.categoryDevices);
+        entry.addPage(LexionEntryHelper.LexiconPageCreator.createTextPage("page.runeassembler", 10, 10, 10, 12, "THIS IS A TEST TEXT!!!"));
+        return entry;
+    }
 }

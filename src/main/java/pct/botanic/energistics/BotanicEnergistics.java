@@ -11,10 +11,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import pct.botanic.energistics.blocks.AERuneAssembler;
 import pct.botanic.energistics.blocks.BotanicEnergisticsBlocks;
 import pct.botanic.energistics.items.BotanicEnergisticsItems;
 import pct.botanic.energistics.proxies.CommonProxy;
 import pct.botanic.energistics.references.CoreRefs;
+import vazkii.botania.api.BotaniaAPI;
 
 /**
  * Created by magnus97 on 22/08/2015.
@@ -48,8 +50,8 @@ public class BotanicEnergistics {
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event){
     	proxy.registerRenderers();
+        BotaniaAPI.addEntry(new AERuneAssembler().getEntry(), BotaniaAPI.categoryDevices);
     }
-
     @Mod.EventHandler
     public static void postInit(FMLPostInitializationEvent event){
     	

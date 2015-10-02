@@ -1,5 +1,7 @@
 package pct.botanic.energistics.utilities;
 
+import appeng.api.storage.data.IAEItemStack;
+import appeng.util.item.AEStack;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -20,16 +22,6 @@ import java.util.*;
  * Created by beepbeat on 22.08.2015.
  */
 public class RecipeChecker {
-
-    public static boolean isAltarRecipe(ItemStack[] input, ItemStack output){
-        List Recipes = BotaniaAPI.runeAltarRecipes;
-        for (Object obj : Recipes){
-            RecipeRuneAltar rec = (RecipeRuneAltar) obj;
-            if (rec == null || rec.getInputs() == null || input == null || rec.getOutput() == null || output == null) return false;
-            if (rec.getInputs().containsAll(Arrays.asList(input)) && input.length == rec.getInputs().size() && rec.getOutput() == output) return true;
-        }
-        return false;
-    }
 
     public static boolean isAltarRecipe(Object[] ObjInput, ItemStack output, TileEntity te) {
         ItemStack stack;
@@ -85,6 +77,16 @@ public class RecipeChecker {
             }
         }
         return false;
+    }
+
+    public static boolean isAltarRecipe(IAEItemStack[] AEStacks, ItemStack output, TileEntity te){
+        List<ItemStack> stacks = new ArrayList<ItemStack>();
+        for (IAEItemStack stack : AEStacks){
+            if (stack != null) {
+                stacks.add(stack.getItemStack());
+            }
+        }
+        return isAltarRecipe(stacks.toArray(), output, te);
     }
 
 
