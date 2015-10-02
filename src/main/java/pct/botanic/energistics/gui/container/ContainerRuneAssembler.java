@@ -80,7 +80,7 @@ public class ContainerRuneAssembler extends ContainerCrossoverMod {
             itemstack = itemstack1.copy();
 
             //From here change accordingly...
-            if(slotIndex < 9) {
+            if(slotIndex < 10) {
                 if(!mergeItemStack(itemstack1, 6, 42, true)) {
                     return null;
                 }
