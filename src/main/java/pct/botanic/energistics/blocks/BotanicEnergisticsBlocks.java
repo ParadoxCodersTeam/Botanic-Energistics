@@ -1,6 +1,7 @@
 package pct.botanic.energistics.blocks;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.GameRegistry;
 import pct.botanic.energistics.blocks.tile.*;
 import vazkii.botania.api.BotaniaAPI;
