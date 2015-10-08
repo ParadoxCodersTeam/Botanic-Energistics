@@ -1,5 +1,6 @@
 #general stuff
 itemGroup.bot.ae=Botanic Energistics
+item.fluixRoot.name=Fluix Root
 
 #runeassembler
 tile.runeassembler.name=Runic Assembler
