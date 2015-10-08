@@ -7,31 +7,20 @@ import appeng.api.networking.GridFlags;
 import appeng.api.networking.crafting.ICraftingPatternDetails;
 import appeng.api.networking.crafting.ICraftingProvider;
 import appeng.api.networking.crafting.ICraftingProviderHelper;
-import appeng.api.networking.events.MENetworkCraftingPatternChange;
-import appeng.api.networking.events.MENetworkEventSubscribe;
-import appeng.api.networking.security.BaseActionSource;
 import appeng.api.networking.security.MachineSource;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.me.GridAccessException;
 import appeng.tile.TileEvent;
 import appeng.tile.events.TileEventType;
 import appeng.tile.grid.AENetworkTile;
-import appeng.util.item.AEItemStack;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
@@ -41,7 +30,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import pct.botanic.energistics.utilities.RecipeChecker;
 import vazkii.botania.api.BotaniaAPI;
-import vazkii.botania.api.internal.IManaBurst;
 import vazkii.botania.api.mana.IManaReceiver;
 import vazkii.botania.api.recipe.RecipeRuneAltar;
 import vazkii.botania.common.block.tile.mana.TileSpreader;
@@ -49,7 +37,6 @@ import vazkii.botania.common.crafting.recipe.HeadRecipe;
 import vazkii.botania.common.entity.EntityManaBurst;
 import vazkii.botania.common.item.ModItems;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,6 +81,7 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
             this.gridProxy.setFlags(GridFlags.REQUIRE_CHANNEL);
             gridProxy.setIdlePowerUsage(0.5D);
         }
+
     }
 
     public TileAERuneAssembler(InventoryPlayer inventoryPlayer, TileAERuneAssembler tileEntity) {
@@ -116,7 +104,7 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
                         tmp.add(obj);
                     }
                 }
-                helper.addCraftingOption(this, new RuneAssemblerCraftingPattern(tmp.toArray(), rec.getOutput()));
+                helper.addCraftingOption(this, new RuneAssemblerCraftingPattern(tmp.toArray(), rec.getOutput(), rec.getManaUsage()));
                 continue;
             }
 
@@ -130,11 +118,11 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
                         tmp.add(obj);
                     }
                 }
-                helper.addCraftingOption(this, new RuneAssemblerCraftingPattern(tmp.toArray(), rec.getOutput()));
+                helper.addCraftingOption(this, new RuneAssemblerCraftingPattern(tmp.toArray(), rec.getOutput(), rec.getManaUsage()));
                 continue;
             }
 
-            helper.addCraftingOption(this, new RuneAssemblerCraftingPattern(rec.getInputs().toArray(), rec.getOutput()));
+            helper.addCraftingOption(this, new RuneAssemblerCraftingPattern(rec.getInputs().toArray(), rec.getOutput(), rec.getManaUsage()));
         }
     }
 
@@ -143,9 +131,11 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
         if (iCraftingPatternDetails instanceof RuneAssemblerCraftingPattern){
             output = iCraftingPatternDetails.getOutputs()[0].getItemStack();
             inputs = iCraftingPatternDetails.getInputs();
-            return true;
+            manacost = ((RuneAssemblerCraftingPattern) iCraftingPatternDetails).getManaUsage();
+            //return true;
+            return currMana >= (manacost * 2);
         }
-        return true;
+        return false;
     }
 
     @Override

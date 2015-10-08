@@ -690,5 +690,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Botania r1.7-224-deobf" level="project" />
   </component>
 </module>

@@ -1,19 +1,17 @@
 package pct.botanic.energistics.utilities;
 
 import appeng.api.storage.data.IAEItemStack;
-import appeng.util.item.AEStack;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.oredict.OreDictionary;
 import pct.botanic.energistics.blocks.tile.TileAERuneAssembler;
 import vazkii.botania.api.BotaniaAPI;
+import vazkii.botania.api.recipe.RecipePureDaisy;
 import vazkii.botania.api.recipe.RecipeRuneAltar;
 import vazkii.botania.common.item.ModItems;
-import vazkii.botania.common.item.material.ItemManaResource;
 import vazkii.botania.common.lib.LibOreDict;
 
 import java.util.*;
@@ -48,28 +46,6 @@ public class RecipeChecker {
             RecipeRuneAltar rec = (RecipeRuneAltar) obj;
             if (rec == null || rec.getInputs() == null || rec.getOutput() == null || output == null)
                 return false;
-/*            boolean containsAll = true;
-            for (Object object : rec.getInputs()){
-              for (Object object2 : input){
-
-                  if (object instanceof String && object2 instanceof String && ((String) object).equalsIgnoreCase((String) object2)){
-                      containsAll = true;
-                      break;}
-
-                  if (object instanceof ItemStack && object2 instanceof ItemStack){
-                      ItemStack is = (ItemStack) object;
-                      ItemStack is2 = (ItemStack) object2;
-                      *//*containsAll = containsAll && (is.getItem() == is2.getItem());
-                      break;*//*
-                      containsAll = GameData.getItemRegistry().getNameForObject(is.getItem()).equalsIgnoreCase(GameData.getItemRegistry().getNameForObject(is2.getItem()));
-
-                  }
-                  //containsAll = containsAll && false;
-
-    //break;
-              }
-                containsAll = false;
-            }*/
             output.stackSize = rec.getOutput().stackSize;
             if (containsAllItems(input, rec.getInputs()) && input.size() == rec.getInputs().size() && rec.getOutput().isItemEqual(output)){
                 if (te instanceof TileAERuneAssembler) ((TileAERuneAssembler) te).setManacost(rec.getManaUsage() * 2);
@@ -87,6 +63,19 @@ public class RecipeChecker {
             }
         }
         return isAltarRecipe(stacks.toArray(), output, te);
+    }
+
+    public static boolean isDaisyRecipe(ItemStack input, ItemStack output){
+        List<RecipePureDaisy> recipes = BotaniaAPI.pureDaisyRecipes;
+        for (RecipePureDaisy rec : recipes){
+            if (rec.getInput() instanceof String && ItemStackEqual(OreDictionary.getOres((String) rec.getInput()).get(0), input) && ItemStackEqual(new ItemStack(rec.getOutput()), output)){
+                  return true;
+            }
+            if (rec.getInput() instanceof ItemStack && ItemStackEqual((ItemStack) rec.getInput(), input) && ItemStackEqual(new ItemStack(rec.getOutput()), output)){
+                return true;
+            }
+        }
+        return false;
     }
 
 
