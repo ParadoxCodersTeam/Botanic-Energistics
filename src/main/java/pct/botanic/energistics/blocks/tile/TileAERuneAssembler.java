@@ -55,6 +55,7 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
         this.currMana = mana;
     }
 
+
     private enum NBTKeys {storedMana, inventory, amount, item, metadata, nbt}
     List RuneAltarRecipes = BotaniaAPI.runeAltarRecipes;
     private ItemStack[] inventory = new ItemStack[11];

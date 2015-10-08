@@ -15,6 +15,7 @@ import pct.botanic.energistics.blocks.AERuneAssembler;
 import pct.botanic.energistics.blocks.BotanicEnergisticsBlocks;
 import pct.botanic.energistics.items.BotanicEnergisticsItems;
 import pct.botanic.energistics.references.CoreRefs;
+import pct.botanic.energistics.utilities.proxy.ClientProxy;
 import vazkii.botania.api.BotaniaAPI;
 
 /**
@@ -45,6 +46,7 @@ public class BotanicEnergistics {
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event){
         BotaniaAPI.addEntry(new AERuneAssembler().getEntry(), BotaniaAPI.categoryDevices);
+        ClientProxy.registerTESR();
     }
     @Mod.EventHandler
     public static void postInit(FMLPostInitializationEvent event){
