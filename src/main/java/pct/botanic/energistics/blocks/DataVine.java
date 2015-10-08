@@ -18,7 +18,7 @@ public class DataVine extends BlockContainer{
 
 	public DataVine() {
 		super(Material.gourd);
-		setBlockName("Data Vine");
+		setBlockName("dataVine");
         setCreativeTab(BotanicEnergistics.botanicEnergisticsTab);;
 	}
 
