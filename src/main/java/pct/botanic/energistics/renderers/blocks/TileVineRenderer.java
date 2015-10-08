@@ -115,14 +115,31 @@ public class TileVineRenderer extends TileEntitySpecialRenderer {
 	 
 	private void drawConnector(float[] angle) {
 		
-		//GL11.glRotatef(-angle[0], 0,1,0);
-		//GL11.glRotatef(angle[1], 0,1,0);
-		//GL11.glRotatef(-angle[2], 0,0,1);
+		//Vertical-Horizontal SU-ND
+		GL11.glRotatef(angle[0]*1F, 0,1,0);
+		GL11.glRotatef(-angle[1]*1F, 1,0,0);
+		//GL11.glRotatef(-angle[2]*2F, 0,0,1);
 		vineModel.renderPart("VineDiagVert");
-		//GL11.glRotatef(angle[2], 0,0,1);
-		//GL11.glRotatef(-angle[1], 0,1,0);
-		//GL11.glRotatef(angle[0], 0,1,0);
+		//GL11.glRotatef(angle[2]*2F, 0,0,1);
+		GL11.glRotatef(angle[1]*1F, 1,0,0);
+		GL11.glRotatef(-angle[0]*1F, 0,1,0);
 		
+		/*
+		//Vertical-Horizontal SU-ND
+		GL11.glRotatef(angle[0]*2F, 0,1,0);
+		GL11.glRotatef(angle[1]*1F, 1,0,0);
+		vineModel.renderPart("VineDiagVert");
+		GL11.glRotatef(-angle[1]*1F, 1,0,0);
+		GL11.glRotatef(-angle[0]*2F, 0,1,0);
+		*/
+		/*
+		//Vertical-Horizontal NU-SD
+		GL11.glRotatef(-angle[1], 1,0,0);
+		GL11.glRotatef(-angle[2]*2F, 0,0,1);
+		vineModel.renderPart("VineDiagVert");
+		GL11.glRotatef(angle[2]*2F, 0,0,1);
+		GL11.glRotatef(angle[1], 1,0,0);
+		*/
 		/*
 		//Horizontal-Diagonal-NW_SE
 		GL11.glRotatef(-angle[0], 0,1,0);
