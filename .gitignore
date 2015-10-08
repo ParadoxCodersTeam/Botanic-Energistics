@@ -17,13 +17,27 @@ options.txt
 ## intellij
 /out
 /.idea
+.idea/
 /*.iml
 /*.ipr
 /*.iws
 /atlassian-ide-plugin.xml
+<<<<<<< HEAD
 saves/
 logs/
 config/
 crash-reports/
 BotaniaVars.dat
+=======
+
+## Minecraft
+saves/
+logs/
+crash-reports/
+
+## Mods
+config/
+BotaniaVars.dat
+options.txt
+>>>>>>> master
 usernamecache.json

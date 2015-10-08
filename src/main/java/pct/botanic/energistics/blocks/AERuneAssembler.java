@@ -2,12 +2,10 @@ package pct.botanic.energistics.blocks;
 
 import appeng.api.AEApi;
 import appeng.api.networking.IGridNode;
-import net.minecraft.util.ChatComponentText;
 import pct.botanic.energistics.BotanicEnergistics;
 import pct.botanic.energistics.gui.GUIHandler;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,11 +13,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import pct.botanic.energistics.blocks.tile.TileAERuneAssembler;
+import pct.botanic.energistics.references.CoreRefs;
 import pct.botanic.energistics.utilities.LexionEntryHelper;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.ILexiconable;
 import vazkii.botania.api.lexicon.LexiconEntry;
-import vazkii.botania.api.lexicon.LexiconPage;
+import vazkii.botania.common.lexicon.page.PageElvenRecipe;
 import vazkii.botania.common.lexicon.page.PageText;
 
 
@@ -28,9 +27,9 @@ public class AERuneAssembler extends BlockContainer implements ILexiconable{
 
     public AERuneAssembler() {
         super(Material.iron);
-        setBlockName("AE Rune Assembler");
+        setBlockName("runeassembler");
         setCreativeTab(BotanicEnergistics.botanicEnergisticsTab);
-
+        setBlockTextureName(CoreRefs.MODID + ":runeassembler");
     }
 
     @Override
@@ -82,15 +81,15 @@ public class AERuneAssembler extends BlockContainer implements ILexiconable{
 
     @Override
     public LexiconEntry getEntry(World world, int i, int i1, int i2, EntityPlayer entityPlayer, ItemStack itemStack) {
-        LexiconEntry entry = new LexionEntryHelper.runicKnowledgeEntry("entry.runeAssembler", BotaniaAPI.categoryDevices);
-        //entry.addPage(LexionEntryHelper.LexiconPageCreator.createTextPage("page.runeassembler", 10, 10, 10, 12, "THIS IS A TEST TEXT!!!"));
-        entry.addPage(new PageText("page.runeassembler"));
-        return entry;
+        return getEntry();
     }
 
     public LexiconEntry getEntry() {
-        LexiconEntry entry = new LexionEntryHelper.elvenKnowledgeEntry("entry.runeAssembler", BotaniaAPI.categoryDevices);
-        entry.addPage(LexionEntryHelper.LexiconPageCreator.createTextPage("page.runeassembler", 10, 10, 10, 12, "THIS IS A TEST TEXT!!!"));
+        LexiconEntry entry = new LexionEntryHelper.elvenKnowledgeEntry("entry.runeassembler", BotaniaAPI.categoryDevices, new ItemStack(this));
+        //entry.addPage(LexionEntryHelper.LexiconPageCreator.createTextPage("page.runeassembler", 10, 10, 10, 12, "THIS IS A TEST TEXT!!!"));
+        //entry.addPage(new PageText("This is a test text page"));
+        entry.addPage(new PageText("page1.runeassembler"));
+        entry.addPage(new PageElvenRecipe("pageRecipe.runeassebler", BotanicEnergisticsBlocks.AERuneAssembler));
         return entry;
     }
 }

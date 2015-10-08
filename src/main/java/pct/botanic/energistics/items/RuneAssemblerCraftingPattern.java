@@ -25,6 +25,7 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
 
     ItemStack[] input;
     ItemStack output;
+    int manaUsage;
 
     public RuneAssemblerCraftingPattern() {
         setCreativeTab(BotanicEnergistics.botanicEnergisticsTab);
@@ -35,14 +36,15 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
         input[0] = new ItemStack(Items.record_11);
     }
 
-    public RuneAssemblerCraftingPattern(ItemStack[] inputStacks, ItemStack output) {
+    public RuneAssemblerCraftingPattern(ItemStack[] inputStacks, ItemStack output, int manaUsage) {
         this.input = inputStacks;
         this.output = output;
+        this.manaUsage = manaUsage;
         setCreativeTab(BotanicEnergistics.botanicEnergisticsTab);
         setMaxStackSize(64);
     }
 
-    public RuneAssemblerCraftingPattern(Object[] inputStacks, ItemStack output) {
+    public RuneAssemblerCraftingPattern(Object[] inputStacks, ItemStack output, int manaUsage) {
         this.input = new ItemStack[inputStacks.length];
         for (int i = 0; i < inputStacks.length; i++) {
             Object obj = inputStacks[i];
@@ -52,8 +54,13 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
                 input[i] = OreDictionary.getOres((String) obj).get(0);
         }
         this.output = output;
+        this.manaUsage = manaUsage;
         setCreativeTab(BotanicEnergistics.botanicEnergisticsTab);
         setMaxStackSize(64);
+    }
+
+    public int getManaUsage() {
+        return manaUsage;
     }
 
     @Override
@@ -144,7 +151,7 @@ public class RuneAssemblerCraftingPattern extends Item implements ICraftingPatte
 
     @Override
     public ICraftingPatternDetails getPatternForItem(ItemStack itemStack, World world) {
-        return new RuneAssemblerCraftingPattern(null,itemStack);
+        return new RuneAssemblerCraftingPattern(null,itemStack,0);
     }
 
 

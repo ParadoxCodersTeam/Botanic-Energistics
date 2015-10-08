@@ -1,0 +1,13 @@
+#general stuff
+itemGroup.bot.ae=Botanic Energistics
+item.fluixRoot.name=Fluix Root
+
+#runeassembler
+tile.runeassembler.name=Runic Assembler
+entry.runeassembler=Runic Assembler
+page1.runeassembler=This special runic altar allows you to create runes via an AE-System. This uses double the amount of mana, but won't need any Livingrock. Crafting recipe is coming soon.
+
+#AEDaisy
+tile.aedaisy.name=Cabled Daisy
+entry.aedaisy=
+page1.aedaisy=

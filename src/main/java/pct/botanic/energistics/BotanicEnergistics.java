@@ -6,6 +6,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
@@ -15,6 +16,7 @@ import pct.botanic.energistics.blocks.AERuneAssembler;
 import pct.botanic.energistics.blocks.BotanicEnergisticsBlocks;
 import pct.botanic.energistics.items.BotanicEnergisticsItems;
 import pct.botanic.energistics.proxies.CommonProxy;
+import pct.botanic.energistics.recipes.BotanicEnergisticsRecipes;
 import pct.botanic.energistics.references.CoreRefs;
 import vazkii.botania.api.BotaniaAPI;
 
@@ -50,7 +52,9 @@ public class BotanicEnergistics {
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event){
     	proxy.registerRenderers();
-        BotaniaAPI.addEntry(new AERuneAssembler().getEntry(), BotaniaAPI.categoryDevices);
+    	BotanicEnergisticsRecipes.Register();
+    	
+    	BotaniaAPI.addEntry(new AERuneAssembler().getEntry(), BotaniaAPI.categoryDevices);
     }
     @Mod.EventHandler
     public static void postInit(FMLPostInitializationEvent event){
