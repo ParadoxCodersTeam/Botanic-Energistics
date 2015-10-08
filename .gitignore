@@ -7,17 +7,29 @@
 bin/
 
 ## eclipse
-/eclipse
-/.settings
-/.metadata
-/.classpath
-/.project
+eclipse/
+.settings/
+.classpath
+.project
 /bin
+options.txt
 
 ## intellij
 /out
 /.idea
+.idea/
 /*.iml
 /*.ipr
 /*.iws
 /atlassian-ide-plugin.xml
+
+## Minecraft
+saves/
+logs/
+crash-reports/
+
+## Mods
+config/
+BotaniaVars.dat
+options.txt
+usernamecache.json
