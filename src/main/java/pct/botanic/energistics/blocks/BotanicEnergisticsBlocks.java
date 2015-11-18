@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import pct.botanic.energistics.blocks.tile.TileAEDaisy;
 import pct.botanic.energistics.blocks.tile.TileAERuneAssembler;
+import pct.botanic.energistics.utilities.Config;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.recipe.RecipeElvenTrade;
 import vazkii.botania.common.block.ModBlocks;
@@ -26,14 +27,18 @@ public class BotanicEnergisticsBlocks {
 
     public static void Register(){
         //RuneAssembler
-        GameRegistry.registerTileEntity(TileAERuneAssembler.class, "tile.runeassembler");
-        RuneAssembler = GameRegistry.registerBlock(new AERuneAssembler(), "AERuneAssembler");
-        RecRuneAssembler = BotaniaAPI.registerElvenTradeRecipe(new ItemStack(RuneAssembler), new ItemStack(ModBlocks.runeAltar), new ItemStack(ModItems.tinyPlanet), new ItemStack(ModItems.temperanceStone), new ItemStack(AEApi.instance().definitions().blocks().craftingUnit().maybeBlock().get()), new ItemStack(AEApi.instance().definitions().blocks().controller().maybeBlock().get()));
+        if (Config.isRuneAssembler()) {
+            GameRegistry.registerTileEntity(TileAERuneAssembler.class, "tile.runeassembler");
+            RuneAssembler = GameRegistry.registerBlock(new AERuneAssembler(), "AERuneAssembler");
+            RecRuneAssembler = BotaniaAPI.registerElvenTradeRecipe(new ItemStack(RuneAssembler), new ItemStack(ModBlocks.runeAltar), new ItemStack(ModItems.tinyPlanet), new ItemStack(ModItems.temperanceStone), new ItemStack(AEApi.instance().definitions().blocks().craftingUnit().maybeBlock().get()), new ItemStack(AEApi.instance().definitions().blocks().controller().maybeBlock().get()));
+        }
 
         //AE-Daisy
-        GameRegistry.registerTileEntity(TileAEDaisy.class, "tile.aedaisy");
-        AEDaisy = GameRegistry.registerBlock(new AEPureDaisy(), "AEDaisy");
-        RecAEDaisy = BotaniaAPI.registerElvenTradeRecipe(new ItemStack(AEDaisy), ItemBlockSpecialFlower.ofType("puredaisy"), new ItemStack(ModItems.tinyPlanet), new ItemStack(ModItems.blackLotus), new ItemStack(ModItems.keepIvy), new ItemStack(ModItems.laputaShard, 1, 5), new ItemStack(AEApi.instance().definitions().blocks().craftingUnit().maybeBlock().get()), new ItemStack(AEApi.instance().definitions().blocks().controller().maybeBlock().get()));
+        if (Config.isAedaisy()) {
+            GameRegistry.registerTileEntity(TileAEDaisy.class, "tile.aedaisy");
+            AEDaisy = GameRegistry.registerBlock(new AEPureDaisy(), "AEDaisy");
+            RecAEDaisy = BotaniaAPI.registerElvenTradeRecipe(new ItemStack(AEDaisy), ItemBlockSpecialFlower.ofType("puredaisy"), new ItemStack(ModItems.tinyPlanet), new ItemStack(ModItems.blackLotus), new ItemStack(ModItems.keepIvy), new ItemStack(ModItems.laputaShard, 1, 5), new ItemStack(AEApi.instance().definitions().blocks().craftingUnit().maybeBlock().get()), new ItemStack(AEApi.instance().definitions().blocks().controller().maybeBlock().get()));
+        }
     }
 
 }
