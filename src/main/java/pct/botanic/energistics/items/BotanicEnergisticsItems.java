@@ -11,7 +11,7 @@ import java.util.List;
 public class BotanicEnergisticsItems {
 
     public static void Register(){
-        GameRegistry.registerItem(new RuneAssemblerCraftingPattern(), "RuneAssemblerPattern", CoreRefs.MODID);
+        //GameRegistry.registerItem(new RuneAssemblerCraftingPattern(), "RuneAssemblerPattern", CoreRefs.MODID);
 
     }
 

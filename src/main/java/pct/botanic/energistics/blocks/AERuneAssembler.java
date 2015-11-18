@@ -2,6 +2,8 @@ package pct.botanic.energistics.blocks;
 
 import appeng.api.AEApi;
 import appeng.api.networking.IGridNode;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.util.IIcon;
 import pct.botanic.energistics.BotanicEnergistics;
 import pct.botanic.energistics.gui.GUIHandler;
 import net.minecraft.block.BlockContainer;
@@ -18,12 +20,14 @@ import pct.botanic.energistics.utilities.LexionEntryHelper;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.ILexiconable;
 import vazkii.botania.api.lexicon.LexiconEntry;
+import vazkii.botania.client.core.helper.IconHelper;
 import vazkii.botania.common.lexicon.page.PageElvenRecipe;
 import vazkii.botania.common.lexicon.page.PageText;
 
 
 public class AERuneAssembler extends BlockContainer implements ILexiconable{
 
+    IIcon[] icons;
 
     public AERuneAssembler() {
         super(Material.iron);
@@ -89,7 +93,8 @@ public class AERuneAssembler extends BlockContainer implements ILexiconable{
         //entry.addPage(LexionEntryHelper.LexiconPageCreator.createTextPage("page.runeassembler", 10, 10, 10, 12, "THIS IS A TEST TEXT!!!"));
         //entry.addPage(new PageText("This is a test text page"));
         entry.addPage(new PageText("page1.runeassembler"));
-        entry.addPage(new PageElvenRecipe("pageRecipe.runeassebler", BotanicEnergisticsBlocks.AERuneAssembler));
+        entry.addPage(new PageElvenRecipe("pageRecipe.runeassembler", BotanicEnergisticsBlocks.RecRuneAssembler));
         return entry;
     }
+
 }

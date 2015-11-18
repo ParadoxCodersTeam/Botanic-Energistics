@@ -1,29 +1,39 @@
 package pct.botanic.energistics.blocks;
 
+import appeng.api.AEApi;
+import appeng.api.util.AEColor;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import pct.botanic.energistics.blocks.tile.TileAEDaisy;
 import pct.botanic.energistics.blocks.tile.TileAERuneAssembler;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.recipe.RecipeElvenTrade;
 import vazkii.botania.common.block.ModBlocks;
+import vazkii.botania.common.block.subtile.SubTilePureDaisy;
 import vazkii.botania.common.item.ModItems;
+import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
 
 /**
  * Created by magnus97 on 22/08/2015.
  */
 public class BotanicEnergisticsBlocks {
-    public static RecipeElvenTrade AERuneAssembler;
+    public static RecipeElvenTrade RecRuneAssembler;
+    public static RecipeElvenTrade RecAEDaisy;
+
+    public static Block AEDaisy;
+    public static Block RuneAssembler;
 
     public static void Register(){
         //RuneAssembler
         GameRegistry.registerTileEntity(TileAERuneAssembler.class, "tile.runeassembler");
-        GameRegistry.registerBlock(new AERuneAssembler(), "AERuneAssembler");
-        AERuneAssembler = BotaniaAPI.registerElvenTradeRecipe(new ItemStack(new AERuneAssembler()), new ItemStack(ModBlocks.runeAltar), new ItemStack(ModItems.tinyPlanet), new ItemStack(ModItems.temperanceStone));
+        RuneAssembler = GameRegistry.registerBlock(new AERuneAssembler(), "AERuneAssembler");
+        RecRuneAssembler = BotaniaAPI.registerElvenTradeRecipe(new ItemStack(RuneAssembler), new ItemStack(ModBlocks.runeAltar), new ItemStack(ModItems.tinyPlanet), new ItemStack(ModItems.temperanceStone), new ItemStack(AEApi.instance().definitions().blocks().craftingUnit().maybeBlock().get()), new ItemStack(AEApi.instance().definitions().blocks().controller().maybeBlock().get()));
 
         //AE-Daisy
         GameRegistry.registerTileEntity(TileAEDaisy.class, "tile.aedaisy");
-        GameRegistry.registerBlock(new AEPureDaisy(), "AEDaisy");
+        AEDaisy = GameRegistry.registerBlock(new AEPureDaisy(), "AEDaisy");
+        RecAEDaisy = BotaniaAPI.registerElvenTradeRecipe(new ItemStack(AEDaisy), ItemBlockSpecialFlower.ofType("puredaisy"), new ItemStack(ModItems.tinyPlanet), new ItemStack(ModItems.blackLotus), new ItemStack(ModItems.keepIvy), new ItemStack(ModItems.laputaShard, 1, 5), new ItemStack(AEApi.instance().definitions().blocks().craftingUnit().maybeBlock().get()), new ItemStack(AEApi.instance().definitions().blocks().controller().maybeBlock().get()));
     }
 
 }

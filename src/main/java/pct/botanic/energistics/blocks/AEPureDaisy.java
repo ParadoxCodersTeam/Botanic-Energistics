@@ -4,18 +4,28 @@ import appeng.api.AEApi;
 import appeng.api.networking.IGridNode;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import pct.botanic.energistics.BotanicEnergistics;
 import pct.botanic.energistics.blocks.tile.TileAEDaisy;
 import pct.botanic.energistics.references.CoreRefs;
+import pct.botanic.energistics.utilities.LexionEntryHelper;
+import vazkii.botania.api.BotaniaAPI;
+import vazkii.botania.api.lexicon.ILexiconable;
+import vazkii.botania.api.lexicon.LexiconEntry;
+import vazkii.botania.client.core.helper.IconHelper;
+import vazkii.botania.common.lexicon.page.PageElvenRecipe;
+import vazkii.botania.common.lexicon.page.PageText;
 
-public class AEPureDaisy extends BlockContainer {
+public class AEPureDaisy extends BlockContainer implements ILexiconable{
+    IIcon icon;
 
     public AEPureDaisy(){
         super(Material.iron);
@@ -38,6 +48,18 @@ public class AEPureDaisy extends BlockContainer {
     @Override
     public boolean isOpaqueCube() {
         return false;
+    }
+
+    @Override
+    public void registerBlockIcons(IIconRegister register) {
+        //super.registerBlockIcons(p_149651_1_);
+        register.registerIcon(CoreRefs.MODID + ":aedaisy");
+    }
+
+    @Override
+    public IIcon getIcon(int p_149691_1_, int p_149691_2_) {
+        //return super.getIcon(p_149691_1_, p_149691_2_);
+        return icon;
     }
 
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
@@ -80,4 +102,15 @@ public class AEPureDaisy extends BlockContainer {
         return true;
     }
 
+    @Override
+    public LexiconEntry getEntry(World world, int i, int i1, int i2, EntityPlayer entityPlayer, ItemStack itemStack) {
+        return getEntry();
+    }
+
+    public LexiconEntry getEntry(){
+       LexiconEntry entry = new LexionEntryHelper.elvenKnowledgeEntry("entry.aedaisy", BotaniaAPI.categoryDevices, new ItemStack(BotanicEnergisticsBlocks.AEDaisy));
+        entry.addPage(new PageText("page1.aedaisy"));
+        entry.addPage(new PageElvenRecipe("pageRecipe.aedaisy", BotanicEnergisticsBlocks.RecAEDaisy));
+        return entry;
+    }
 }

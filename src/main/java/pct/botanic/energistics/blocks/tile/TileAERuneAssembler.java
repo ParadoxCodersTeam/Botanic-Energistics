@@ -28,10 +28,12 @@ import pct.botanic.energistics.items.RuneAssemblerCraftingPattern;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import pct.botanic.energistics.utilities.Config;
 import pct.botanic.energistics.utilities.RecipeChecker;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.mana.IManaReceiver;
 import vazkii.botania.api.recipe.RecipeRuneAltar;
+import vazkii.botania.common.block.mana.BlockRuneAltar;
 import vazkii.botania.common.block.tile.mana.TileSpreader;
 import vazkii.botania.common.crafting.recipe.HeadRecipe;
 import vazkii.botania.common.entity.EntityManaBurst;
@@ -168,6 +170,17 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
             }
         }
         //endregion
+        if (Config.isPassiveMode()){
+            if (!(worldObj.getBlock(xCoord + 1, yCoord, zCoord) instanceof BlockRuneAltar)) return;
+            if (!(worldObj.getBlock(xCoord - 1, yCoord, zCoord) instanceof BlockRuneAltar)) return;
+
+            if (!(worldObj.getBlock(xCoord, yCoord + 1 , zCoord) instanceof BlockRuneAltar)) return;
+            if (!(worldObj.getBlock(xCoord, yCoord - 1 , zCoord) instanceof BlockRuneAltar)) return;
+
+            if (!(worldObj.getBlock(xCoord, yCoord, zCoord + 1) instanceof BlockRuneAltar)) return;
+            if (!(worldObj.getBlock(xCoord, yCoord, zCoord - 1) instanceof BlockRuneAltar)) return;
+        }
+
         if (inputs == null) return;
         ItemStack initalStackSlot10 = null;
         if (inventory[10] != null) {
