@@ -15,6 +15,7 @@ import pct.botanic.energistics.blocks.AEPureDaisy;
 import pct.botanic.energistics.blocks.AERuneAssembler;
 import pct.botanic.energistics.blocks.BotanicEnergisticsBlocks;
 import pct.botanic.energistics.items.BotanicEnergisticsItems;
+import pct.botanic.energistics.recipes.BotanicEnergisticsRecipes;
 import pct.botanic.energistics.references.CoreRefs;
 import pct.botanic.energistics.utilities.Config;
 import pct.botanic.energistics.utilities.proxy.ClientProxy;
@@ -48,12 +49,14 @@ public class BotanicEnergistics {
     }
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event){
-        BotaniaAPI.addEntry(new AERuneAssembler().getEntry(), BotaniaAPI.categoryDevices);
+    	BotanicEnergisticsRecipes.Register();
+    	
+    	BotaniaAPI.addEntry(new AERuneAssembler().getEntry(), BotaniaAPI.categoryDevices);
         BotaniaAPI.addEntry(new AEPureDaisy().getEntry(), BotaniaAPI.categoryDevices);
     }
     @Mod.EventHandler
     public static void postInit(FMLPostInitializationEvent event){
-        ClientProxy.registerTESR();
+
     }
 
 }
