@@ -15,17 +15,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
+import pct.botanic.energistics.blocks.AEPureDaisy;
 import pct.botanic.energistics.items.RuneAssemblerCraftingPattern;
 import pct.botanic.energistics.utilities.RecipeChecker;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.mana.IManaReceiver;
 import vazkii.botania.api.recipe.RecipePureDaisy;
+import vazkii.botania.common.block.decor.IFloatingFlower;
 import vazkii.botania.common.block.tile.mana.TileSpreader;
 import vazkii.botania.common.entity.EntityManaBurst;
 
 import java.util.List;
 
-public class TileAEDaisy extends AENetworkTile implements ICraftingProvider, IManaReceiver {
+public class TileAEDaisy extends AENetworkTile implements ICraftingProvider, IManaReceiver, IFloatingFlower {
 
     private int currMana = 0, maxMana = 30000, manaCost = 0, multiplier = 1;
     private ItemStack input, output;
@@ -131,5 +133,20 @@ public class TileAEDaisy extends AENetworkTile implements ICraftingProvider, IMa
         }
 
     isCrafting = false;
+    }
+
+    @Override
+    public ItemStack getDisplayStack() {
+        return new ItemStack(new AEPureDaisy());
+    }
+
+    @Override
+    public IslandType getIslandType() {
+        return IslandType.GRASS;
+    }
+
+    @Override
+    public void setIslandType(IslandType islandType) {
+
     }
 }

@@ -6,8 +6,10 @@ item.fluixRoot.name=Fluix Root
 tile.runeassembler.name=Runic Assembler
 entry.runeassembler=Runic Assembler
 page1.runeassembler=This special runic altar allows you to create runes via an AE-System. This uses double the amount of mana, but won't need any Livingrock. Crafting recipe is coming soon.
+pageRecipe.runeassembler=The tempered stone must be inactive!
 
 #AEDaisy
 tile.aedaisy.name=Cabled Daisy
-entry.aedaisy=
-page1.aedaisy=
+entry.aedaisy=Cabled Daisy
+page1.aedaisy=The Cabled Daisy allows you to create everything an Pure Daisy would be able to create but needs
+pageRecipe.aedaisy=Testing Stuff

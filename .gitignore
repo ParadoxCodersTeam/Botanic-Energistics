@@ -1,3 +1,18 @@
+/gradle
+/build
+/MinecraftForge-Credits.txt
+/README.md
+/MinecraftForge-License.txt
+/README.txt
+/setup.bat
+/LICENSE
+/LICENSE-fml.txt
+/gradlew
+/eclipse.bat
+/forge-1.7.10-10.13.4.1448-1.7.10-changelog.txt
+/CREDITS-fml.txt
+/idea.bat
+/gradlew.bat
 ## gradle
 .gradle/
 ## ForgeGradle
@@ -9,6 +24,7 @@ bin/
 ## eclipse
 eclipse/
 .settings/
+/eclipse/config/botaniaenergistics.cfg
 .classpath
 .project
 /bin
@@ -31,5 +47,4 @@ crash-reports/
 ## Mods
 config/
 BotaniaVars.dat
-options.txt
 usernamecache.json
