@@ -1,6 +1,7 @@
 package pct.botanic.energistics;
 
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -19,6 +20,7 @@ import pct.botanic.energistics.recipes.BotanicEnergisticsRecipes;
 import pct.botanic.energistics.references.CoreRefs;
 import pct.botanic.energistics.utilities.Config;
 import pct.botanic.energistics.utilities.proxy.ClientProxy;
+import pct.botanic.energistics.utilities.proxy.IProxy;
 import vazkii.botania.api.BotaniaAPI;
 
 /**
@@ -30,6 +32,9 @@ public class BotanicEnergistics {
     @Mod.Instance()
     public static BotanicEnergistics instance;
 
+    @SidedProxy(clientSide = "pct.botanic.energistics.utilities.proxy.ClientProxy", serverSide = "pct.botanic.energistics.utilities.proxy.ServerProxy")
+    public static IProxy proxy;
+
     public static final CreativeTabs botanicEnergisticsTab = new CreativeTabs(CoreRefs.CTAB) {
         @Override
         @SideOnly(Side.CLIENT)
@@ -40,12 +45,15 @@ public class BotanicEnergistics {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event){
+        Config.init(event.getSuggestedConfigurationFile());
         BotanicEnergisticsBlocks.Register();
 
         BotanicEnergisticsItems.Register();
 
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new pct.botanic.energistics.gui.GUIHandler());
         Config.init(event.getSuggestedConfigurationFile());
+
+        proxy.registerRenderer();
     }
     @Mod.EventHandler
     public static void init(FMLInitializationEvent event){

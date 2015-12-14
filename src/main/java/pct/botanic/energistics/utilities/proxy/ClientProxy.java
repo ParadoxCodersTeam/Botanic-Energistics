@@ -11,8 +11,10 @@ import vazkii.botania.client.render.tile.RenderTileFloatingFlower;
  */
 public class ClientProxy extends CommonProxy {
 
-    public static void registerTESR(){
-       // ClientRegistry.bindTileEntitySpecialRenderer(TileAERuneAssembler.class, new TESRRunicAssembler());
+    @Override
+    public void registerRenderer() {
+        ClientRegistry.bindTileEntitySpecialRenderer(TileAERuneAssembler.class, new TESRRunicAssembler());
         //ClientRegistry.bindTileEntitySpecialRenderer(TileAEDaisy.class, new RenderTileFloatingFlower());
     }
+
 }

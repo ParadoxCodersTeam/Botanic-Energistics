@@ -24,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
+import org.apache.logging.log4j.core.Logger;
 import pct.botanic.energistics.items.RuneAssemblerCraftingPattern;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -44,13 +45,14 @@ import java.util.List;
 
 
 
-public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvider, ISidedInventory, IManaReceiver {
+public class TileAERuneAssembler extends TileGeneric implements ISidedInventory {
 
 
     private boolean validRecipe;
     private int manacost = 0;
     private ItemStack output;
     private IAEItemStack[] inputs;
+    private int waitCounter = 0;
 
 
     public void setMana(int mana) {
@@ -131,7 +133,7 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
 
     @Override
     public boolean pushPattern(ICraftingPatternDetails iCraftingPatternDetails, InventoryCrafting inventoryCrafting) {
-        if (iCraftingPatternDetails instanceof RuneAssemblerCraftingPattern){
+        if (iCraftingPatternDetails instanceof RuneAssemblerCraftingPattern/* && inputs[0] == null*/){
             output = iCraftingPatternDetails.getOutputs()[0].getItemStack();
             inputs = iCraftingPatternDetails.getInputs();
             manacost = ((RuneAssemblerCraftingPattern) iCraftingPatternDetails).getManaUsage();
@@ -148,6 +150,7 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
 
     @TileEvent(TileEventType.TICK)
     public void onTick() {
+
         //region Nerfing
         List<EntityManaBurst> entities = this.getWorldObj().getEntitiesWithinAABB(EntityManaBurst.class, AxisAlignedBB.getBoundingBox(xCoord - 0.5, yCoord - 0.5, zCoord - 0.5, xCoord + 1.5, yCoord + 1.5, zCoord + 1.5));
         for (EntityManaBurst manaBurst : entities) {
@@ -170,15 +173,19 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
             }
         }
         //endregion
+        waitCounter++;
+        if (waitCounter % 5 != 0) return;
         if (Config.isPassiveMode()){
-            if (!(worldObj.getBlock(xCoord + 1, yCoord, zCoord) instanceof BlockRuneAltar)) return;
-            if (!(worldObj.getBlock(xCoord - 1, yCoord, zCoord) instanceof BlockRuneAltar)) return;
+            boolean returnv = true;
+            if ((worldObj.getBlock(xCoord + 1, yCoord, zCoord) instanceof BlockRuneAltar)) returnv = false;
+            if ((worldObj.getBlock(xCoord - 1, yCoord, zCoord) instanceof BlockRuneAltar)) returnv = false;
 
-            if (!(worldObj.getBlock(xCoord, yCoord + 1 , zCoord) instanceof BlockRuneAltar)) return;
-            if (!(worldObj.getBlock(xCoord, yCoord - 1 , zCoord) instanceof BlockRuneAltar)) return;
+            if ((worldObj.getBlock(xCoord, yCoord + 1 , zCoord) instanceof BlockRuneAltar)) returnv = false;
+            if ((worldObj.getBlock(xCoord, yCoord - 1 , zCoord) instanceof BlockRuneAltar)) returnv = false;
 
-            if (!(worldObj.getBlock(xCoord, yCoord, zCoord + 1) instanceof BlockRuneAltar)) return;
-            if (!(worldObj.getBlock(xCoord, yCoord, zCoord - 1) instanceof BlockRuneAltar)) return;
+            if ((worldObj.getBlock(xCoord, yCoord, zCoord + 1) instanceof BlockRuneAltar)) returnv = false;
+            if ((worldObj.getBlock(xCoord, yCoord, zCoord - 1) instanceof BlockRuneAltar)) returnv = false;
+            if (returnv) return;
         }
 
         if (inputs == null) return;
@@ -222,23 +229,24 @@ public class TileAERuneAssembler extends AENetworkTile implements ICraftingProvi
             validRecipe = false;
             //inventory[9] = inventory[10].copy();
             try {
-                //if (this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(inventory[10].copy()), Actionable.SIMULATE, new MachineSource(this)) == null) return;
+                //if (this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(inventory[10].copy()), Actionable.SIMULATE, new MachineSource(this)) != null) return;
                 this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(output.copy()), Actionable.MODULATE, new MachineSource(this));
+                currMana -= manacost;
+
                 if (!getProxy().getCrafting().isRequesting(AEApi.instance().storage().createItemStack(output))){
                     for (int i = 0; i < inputs.length; i++) {
                          inputs[i] = null;
                          output = null;
                     }
+                    return;
                 }
 
-                currMana -= manacost;
+
 
             } catch (GridAccessException e) {
-                //
+                System.out.println("Error while inserting");
             }
 
-            if (initalStackSlot10 != null)
-                inventory[10] = initalStackSlot10;
         }
 
         }

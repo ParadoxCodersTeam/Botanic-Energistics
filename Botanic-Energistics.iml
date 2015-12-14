@@ -691,5 +691,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Botania r1.7-224-deobf" level="project" />
+    <orderEntry type="library" name="appliedenergistics2-rv2-stable-10-dev" level="project" />
   </component>
 </module>

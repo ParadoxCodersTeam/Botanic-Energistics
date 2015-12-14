@@ -10,6 +10,7 @@ import appeng.me.GridAccessException;
 import appeng.tile.TileEvent;
 import appeng.tile.events.TileEventType;
 import appeng.tile.grid.AENetworkTile;
+import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -17,17 +18,20 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
 import pct.botanic.energistics.blocks.AEPureDaisy;
 import pct.botanic.energistics.items.RuneAssemblerCraftingPattern;
+import pct.botanic.energistics.utilities.Config;
 import pct.botanic.energistics.utilities.RecipeChecker;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.mana.IManaReceiver;
 import vazkii.botania.api.recipe.RecipePureDaisy;
 import vazkii.botania.common.block.decor.IFloatingFlower;
+import vazkii.botania.common.block.mana.BlockRuneAltar;
 import vazkii.botania.common.block.tile.mana.TileSpreader;
 import vazkii.botania.common.entity.EntityManaBurst;
+import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
 
 import java.util.List;
 
-public class TileAEDaisy extends AENetworkTile implements ICraftingProvider, IManaReceiver, IFloatingFlower {
+public class TileAEDaisy extends TileGeneric implements IFloatingFlower {
 
     private int currMana = 0, maxMana = 30000, manaCost = 0, multiplier = 1;
     private ItemStack input, output;
@@ -107,6 +111,11 @@ public class TileAEDaisy extends AENetworkTile implements ICraftingProvider, IMa
             }
         }
         //endregion
+        //region PassiveMode
+        if (Config.isPassiveMode()){
+
+        }
+        //endregion
         boolean validRecipe = false;
         if (input != null && output != null) {
             validRecipe = RecipeChecker.isDaisyRecipe(input, output);
@@ -148,5 +157,10 @@ public class TileAEDaisy extends AENetworkTile implements ICraftingProvider, IMa
     @Override
     public void setIslandType(IslandType islandType) {
 
+    }
+
+    @Override
+    public void setMana(int i) {
+        this.currMana = i;
     }
 }

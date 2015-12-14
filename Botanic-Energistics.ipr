@@ -20,7 +20,9 @@
   <component name="DependencyValidationManager">
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
-  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
@@ -184,6 +186,13 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
   </component>
   <component name="libraryTable">
+    <library name="appliedenergistics2-rv2-stable-10-dev">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/libs/appliedenergistics2-rv2-stable-10-dev.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="Botania r1.7-224-deobf">
       <CLASSES>
         <root url="jar://$PROJECT_DIR$/libs/Botania r1.7-224-deobf.jar!/" />

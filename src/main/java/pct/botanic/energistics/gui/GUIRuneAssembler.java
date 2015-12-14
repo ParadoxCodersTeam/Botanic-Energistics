@@ -1,6 +1,7 @@
 package pct.botanic.energistics.gui;
 
 import pct.botanic.energistics.blocks.tile.TileAERuneAssembler;
+import pct.botanic.energistics.blocks.tile.TileGeneric;
 import pct.botanic.energistics.gui.container.ContainerRuneAssembler;
 import net.minecraft.entity.player.InventoryPlayer;
 
@@ -10,9 +11,9 @@ import java.util.logging.LogManager;
  * Created by beepbeat on 22.08.2015.
  */
 public class GUIRuneAssembler extends GUICrossOver {
-    TileAERuneAssembler te;
+    TileGeneric te;
 
-    public GUIRuneAssembler(InventoryPlayer playerInventory, TileAERuneAssembler te) {
+    public GUIRuneAssembler(InventoryPlayer playerInventory, TileGeneric te) {
         super(new ContainerRuneAssembler(playerInventory, te), "RuneAssembler", playerInventory);
         this.te = te;
 

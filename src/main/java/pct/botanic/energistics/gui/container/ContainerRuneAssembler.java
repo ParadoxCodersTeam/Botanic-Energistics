@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import pct.botanic.energistics.blocks.tile.TileGeneric;
 
 import java.util.List;
 
@@ -15,11 +16,11 @@ import java.util.List;
  * Created by beepbeat on 22.08.2015.
  */
 public class ContainerRuneAssembler extends ContainerCrossoverMod {
-    TileAERuneAssembler te;
+    TileGeneric te;
     private int lastMana;
 
-    public ContainerRuneAssembler(InventoryPlayer playerInventory, TileAERuneAssembler te){
-        addPlayerSlots(playerInventory, 8, 84);
+    public ContainerRuneAssembler(InventoryPlayer playerInventory, TileGeneric te){
+       /* addPlayerSlots(playerInventory, 8, 84);
 
         //left row
         addSlotToContainer(new Slot(te, 0, 62, 53));
@@ -41,7 +42,7 @@ public class ContainerRuneAssembler extends ContainerCrossoverMod {
 
         //toCraft
         addSlotToContainer(new Slot(te, 10, 132, 18));
-
+*/
         this.te = te;
     }
 
