@@ -17,6 +17,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
@@ -44,7 +45,8 @@ public class TileAEElvenPortal extends TileGeneric {
     private int currMana = 0, maxMana = 30000, manacost = 0, waitCounter = 0;
     private IAEItemStack[] inputs;
     private ItemStack output;
-    private boolean validRecipe;
+    private boolean validRecipe, isCrafting;
+    private enum NBTKeys{currMana, Root, inputs, output}
 
     @Override
     public void provideCrafting(ICraftingProviderHelper helper) {
@@ -137,24 +139,28 @@ public class TileAEElvenPortal extends TileGeneric {
 
         if (validRecipe && currMana >= manacost) {
             validRecipe = false;
+            isCrafting = true;
             //inventory[9] = inventory[10].copy();
             try {
                 //if (this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(inventory[10].copy()), Actionable.SIMULATE, new MachineSource(this)) != null) return;
                 this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(output.copy()), Actionable.MODULATE, new MachineSource(this));
                 currMana -= manacost;
 
-                if (!getProxy().getCrafting().isRequesting(AEApi.instance().storage().createItemStack(output))){
+                //if (!getProxy().getCrafting().isRequesting(AEApi.instance().storage().createItemStack(output))){
                     for (int i = 0; i < inputs.length; i++) {
                         inputs[i] = null;
                         output = null;
                     }
-                    return;
-                }
+                    //return;
+                //}
 
 
 
             } catch (GridAccessException e) {
                 //
+            }
+            finally {
+                isCrafting = false;
             }
 
         }
@@ -163,7 +169,7 @@ public class TileAEElvenPortal extends TileGeneric {
 
     @Override
     public boolean pushPattern(ICraftingPatternDetails iCraftingPatternDetails, InventoryCrafting inventoryCrafting) {
-        if (iCraftingPatternDetails instanceof RuneAssemblerCraftingPattern/* && inputs[0] == null*/){
+        if (iCraftingPatternDetails instanceof RuneAssemblerCraftingPattern  && !isCrafting/* && inputs[0] == null*/){
             output = iCraftingPatternDetails.getOutputs()[0].getItemStack();
             inputs = iCraftingPatternDetails.getInputs();
             manacost = ((RuneAssemblerCraftingPattern) iCraftingPatternDetails).getManaUsage();
@@ -203,4 +209,20 @@ public class TileAEElvenPortal extends TileGeneric {
     public void setMana(int i) {
         this.currMana = i;
     }
+
+    @TileEvent(TileEventType.WORLD_NBT_WRITE)
+    public void writeNBT(NBTTagCompound cmp){
+        NBTTagCompound root = new NBTTagCompound();
+        root.setInteger(NBTKeys.currMana.toString(), currMana);
+        cmp.setTag(NBTKeys.Root.toString(), root);
+    }
+
+    @TileEvent(TileEventType.WORLD_NBT_READ)
+    public void readNBT(NBTTagCompound cmp){
+        if (cmp.hasKey(NBTKeys.Root.toString())){
+            currMana = ((NBTTagCompound) cmp.getTag(NBTKeys.Root.toString())).getInteger(NBTKeys.currMana.toString());
+        }
+    }
+
+
 }

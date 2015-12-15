@@ -13,6 +13,7 @@ import appeng.tile.grid.AENetworkTile;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
@@ -36,6 +37,7 @@ public class TileAEDaisy extends TileGeneric implements IFloatingFlower {
     private int currMana = 0, maxMana = 30000, manaCost = 0, multiplier = 1;
     private ItemStack input, output;
     private boolean isCrafting = false;
+    private enum NBTKeys{currMana, Root}
 
     public TileAEDaisy() {
 
@@ -162,5 +164,19 @@ public class TileAEDaisy extends TileGeneric implements IFloatingFlower {
     @Override
     public void setMana(int i) {
         this.currMana = i;
+    }
+
+    @TileEvent(TileEventType.WORLD_NBT_WRITE)
+    public void writeNBT(NBTTagCompound cmp){
+        NBTTagCompound root = new NBTTagCompound();
+        root.setInteger(NBTKeys.currMana.toString(), currMana);
+        cmp.setTag(NBTKeys.Root.toString(), root);
+    }
+
+    @TileEvent(TileEventType.WORLD_NBT_READ)
+    public void readNBT(NBTTagCompound cmp){
+        if (cmp.hasKey(NBTKeys.Root.toString())){
+            currMana = ((NBTTagCompound) cmp.getTag(NBTKeys.Root.toString())).getInteger(NBTKeys.currMana.toString());
+        }
     }
 }
