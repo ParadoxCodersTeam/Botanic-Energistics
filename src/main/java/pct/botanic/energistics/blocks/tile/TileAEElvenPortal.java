@@ -30,6 +30,7 @@ import vazkii.botania.api.recipe.RecipeElvenTrade;
 import vazkii.botania.api.recipe.RecipeRuneAltar;
 import vazkii.botania.common.block.BlockAlfPortal;
 import vazkii.botania.common.block.mana.BlockRuneAltar;
+import vazkii.botania.common.block.tile.TileAlfPortal;
 import vazkii.botania.common.block.tile.mana.TileSpreader;
 import vazkii.botania.common.crafting.recipe.HeadRecipe;
 import vazkii.botania.common.entity.EntityManaBurst;
@@ -88,6 +89,7 @@ public class TileAEElvenPortal extends TileGeneric {
 
     @TileEvent(TileEventType.TICK)
     public void onTick() {
+        TileAlfPortal portal = null;
 
         //region Nerfing
         List<EntityManaBurst> entities = this.getWorldObj().getEntitiesWithinAABB(EntityManaBurst.class, AxisAlignedBB.getBoundingBox(xCoord - 0.5, yCoord - 0.5, zCoord - 0.5, xCoord + 1.5, yCoord + 1.5, zCoord + 1.5));
@@ -111,22 +113,50 @@ public class TileAEElvenPortal extends TileGeneric {
             }
         }
         //endregion
-        waitCounter++;
-        if (waitCounter % 3 != 0) return;
+        //region PassiveMode
         if (Config.isPassiveMode()){
             boolean returnv = true;
-            if ((worldObj.getBlock(xCoord + 1, yCoord, zCoord) instanceof BlockAlfPortal) && worldObj.getTileEntity(xCoord + 1, yCoord, zCoord).getBlockMetadata() == 0) returnv = false;
-            if ((worldObj.getBlock(xCoord - 1, yCoord, zCoord) instanceof BlockAlfPortal) && worldObj.getTileEntity(xCoord + 1, yCoord, zCoord).getBlockMetadata() == 0) returnv = false;
-
-            if ((worldObj.getBlock(xCoord, yCoord + 1, zCoord) instanceof BlockAlfPortal) && worldObj.getTileEntity(xCoord + 1, yCoord, zCoord).getBlockMetadata() == 0) returnv = false;
-            if ((worldObj.getBlock(xCoord, yCoord - 1, zCoord) instanceof BlockAlfPortal) && worldObj.getTileEntity(xCoord + 1, yCoord, zCoord).getBlockMetadata() == 0) returnv = false;
-
-            if ((worldObj.getBlock(xCoord, yCoord, zCoord + 1) instanceof BlockAlfPortal) && worldObj.getTileEntity(xCoord + 1, yCoord, zCoord).getBlockMetadata() == 0) returnv = false;
-            if ((worldObj.getBlock(xCoord, yCoord, zCoord - 1) instanceof BlockAlfPortal) && worldObj.getTileEntity(xCoord + 1, yCoord, zCoord).getBlockMetadata() == 0) returnv = false;
-            if (returnv) return;
+            try {
+                if ((worldObj.getBlock(xCoord + 1, yCoord, zCoord) instanceof BlockAlfPortal) && worldObj.getTileEntity(xCoord + 1, yCoord, zCoord).getBlockMetadata() == 0) {
+                    returnv = false;
+                    portal = (TileAlfPortal) worldObj.getTileEntity(xCoord + 1, yCoord, zCoord);
+                }
+                if ((worldObj.getBlock(xCoord - 1, yCoord, zCoord) instanceof BlockAlfPortal) && worldObj.getTileEntity(xCoord - 1, yCoord, zCoord).getBlockMetadata() == 0) {
+                    returnv = false;
+                    portal = (TileAlfPortal) worldObj.getTileEntity(xCoord - 1, yCoord, zCoord);
+                }
+                if ((worldObj.getBlock(xCoord, yCoord + 1, zCoord) instanceof BlockAlfPortal)) {
+                    returnv = false;
+                    portal = (TileAlfPortal) worldObj.getTileEntity(xCoord, yCoord + 1, zCoord);
+                }
+                if ((worldObj.getBlock(xCoord, yCoord - 1, zCoord) instanceof BlockAlfPortal) && worldObj.getTileEntity(xCoord, yCoord - 1, zCoord).getBlockMetadata() == 0) {
+                    returnv = false;
+                    portal = (TileAlfPortal) worldObj.getTileEntity(xCoord, yCoord - 1, zCoord);
+                }
+                if ((worldObj.getBlock(xCoord, yCoord, zCoord + 1) instanceof BlockAlfPortal) && worldObj.getTileEntity(xCoord, yCoord, zCoord + 1).getBlockMetadata() == 0) {
+                    returnv = false;
+                    portal = (TileAlfPortal) worldObj.getTileEntity(xCoord, yCoord, zCoord + 1);
+                }
+                if ((worldObj.getBlock(xCoord, yCoord, zCoord - 1) instanceof BlockAlfPortal) && worldObj.getTileEntity(xCoord, yCoord, zCoord - 1).getBlockMetadata() == 0) {
+                    returnv = false;
+                    portal = (TileAlfPortal) worldObj.getTileEntity(xCoord, yCoord, zCoord - 1);
+                }
+                if (returnv) return;
+            }
+            catch (Exception e) {
+                System.out.println("Spam!");
+                return;
+            }
         }
+        //endregion   waitCounter++;
+        //if (waitCounter % 3 != 0) return;
 
+        if (portal == null) return;
+        System.out.println(portal.ticksOpen);
+        portal.onWanded();
+        if (portal.ticksOpen < 51) return;
         if (inputs == null) return;
+
 
         if (inputs.length > 0 && output != null) {
             Object[] inputs2 = new Object[inputs.length];
@@ -144,7 +174,7 @@ public class TileAEElvenPortal extends TileGeneric {
             try {
                 //if (this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(inventory[10].copy()), Actionable.SIMULATE, new MachineSource(this)) != null) return;
                 this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(output.copy()), Actionable.MODULATE, new MachineSource(this));
-                currMana -= manacost;
+                //currMana -= manacost;
 
                 //if (!getProxy().getCrafting().isRequesting(AEApi.instance().storage().createItemStack(output))){
                     for (int i = 0; i < inputs.length; i++) {

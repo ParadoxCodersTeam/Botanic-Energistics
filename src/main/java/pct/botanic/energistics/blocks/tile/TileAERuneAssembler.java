@@ -53,6 +53,7 @@ public class TileAERuneAssembler extends TileGeneric implements ISidedInventory 
     private ItemStack output;
     private IAEItemStack[] inputs;
     private int waitCounter = 0;
+    private boolean isCrafting;
 
 
     public void setMana(int mana) {
@@ -133,7 +134,7 @@ public class TileAERuneAssembler extends TileGeneric implements ISidedInventory 
 
     @Override
     public boolean pushPattern(ICraftingPatternDetails iCraftingPatternDetails, InventoryCrafting inventoryCrafting) {
-        if (iCraftingPatternDetails instanceof RuneAssemblerCraftingPattern/* && inputs[0] == null*/){
+        if (iCraftingPatternDetails instanceof RuneAssemblerCraftingPattern && !isCrafting/* && inputs[0] == null*/){
             output = iCraftingPatternDetails.getOutputs()[0].getItemStack();
             inputs = iCraftingPatternDetails.getInputs();
             manacost = ((RuneAssemblerCraftingPattern) iCraftingPatternDetails).getManaUsage();
@@ -227,24 +228,28 @@ public class TileAERuneAssembler extends TileGeneric implements ISidedInventory 
 
         if (validRecipe && currMana >= manacost) {
             validRecipe = false;
+            isCrafting = true;
             //inventory[9] = inventory[10].copy();
             try {
                 //if (this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(inventory[10].copy()), Actionable.SIMULATE, new MachineSource(this)) != null) return;
                 this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(output.copy()), Actionable.MODULATE, new MachineSource(this));
                 currMana -= manacost;
 
-                if (!getProxy().getCrafting().isRequesting(AEApi.instance().storage().createItemStack(output))){
+             //   if (!getProxy().getCrafting().isRequesting(AEApi.instance().storage().createItemStack(output))){
                     for (int i = 0; i < inputs.length; i++) {
                          inputs[i] = null;
                          output = null;
                     }
                     return;
-                }
+               // }
 
 
 
             } catch (GridAccessException e) {
                 System.out.println("Error while inserting");
+            }
+            finally {
+                isCrafting = false;
             }
 
         }

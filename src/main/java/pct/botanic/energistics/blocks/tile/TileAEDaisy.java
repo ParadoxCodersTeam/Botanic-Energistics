@@ -130,20 +130,23 @@ public class TileAEDaisy extends TileGeneric implements IFloatingFlower {
             try {
                 //if (this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(inventory[10].copy()), Actionable.SIMULATE, new MachineSource(this)) == null) return;
                 this.getProxy().getStorage().getItemInventory().injectItems(AEApi.instance().storage().createItemStack(output.copy()), Actionable.MODULATE, new MachineSource(this));
-                if (!getProxy().getCrafting().isRequesting(AEApi.instance().storage().createItemStack(output))) {
+             //   if (!getProxy().getCrafting().isRequesting(AEApi.instance().storage().createItemStack(output))) {
                     input = null;
                     output = null;
-                }
+//                }
 
                 currMana -= manaCost;
 
             } catch (GridAccessException e) {
                 //
             }
+            finally {
+                isCrafting = false;
+            }
 
         }
 
-    isCrafting = false;
+
     }
 
     @Override
