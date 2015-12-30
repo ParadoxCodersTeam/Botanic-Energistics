@@ -43,7 +43,7 @@ import java.util.List;
  * Created by beepbeat on 06.12.2015.
  */
 public class TileAEElvenPortal extends TileGeneric {
-    private int currMana = 0, maxMana = 30000, manacost = 0, waitCounter = 0;
+    private int currMana = 0, maxMana = 30000, manacost = 0, waitCounter = 0, waitFactor = 3;
     private IAEItemStack[] inputs;
     private ItemStack output;
     private boolean validRecipe, isCrafting;
@@ -149,12 +149,16 @@ public class TileAEElvenPortal extends TileGeneric {
             }
         }
         //endregion   waitCounter++;
-        //if (waitCounter % 3 != 0) return;
+        if (waitCounter % waitFactor != 0) return;
 
         if (portal == null) return;
-        System.out.println(portal.ticksOpen);
-        portal.onWanded();
+       // System.out.println(portal.ticksOpen);
+        if (portal.ticksOpen == 0) {
+            portal.onWanded();
+            waitFactor = 60;
+        }
         if (portal.ticksOpen < 51) return;
+        waitFactor = 3;
         if (inputs == null) return;
 
 

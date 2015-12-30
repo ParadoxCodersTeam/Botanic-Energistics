@@ -50,18 +50,6 @@ public class AEPureDaisy extends BlockContainer implements ILexiconable{
         return false;
     }
 
-    @Override
-    public void registerBlockIcons(IIconRegister register) {
-        //super.registerBlockIcons(p_149651_1_);
-        register.registerIcon(CoreRefs.MODID + ":aedaisy");
-    }
-
-    @Override
-    public IIcon getIcon(int p_149691_1_, int p_149691_2_) {
-        //return super.getIcon(p_149691_1_, p_149691_2_);
-        return icon;
-    }
-
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
         if (world.isRemote) {
             return;
