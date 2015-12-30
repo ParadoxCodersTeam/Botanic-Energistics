@@ -18,8 +18,8 @@ buildscript {
 apply plugin: 'forge'
 apply plugin: 'curseforge'
 
-def modversion = "0.2.4"
-version = modversion
+
+version = System.getenv('version')
 
 group= "pct.batanic.energistics" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "BotanicEnergistics"
@@ -28,7 +28,7 @@ minecraft {
     version = "1.7.10-10.13.4.1448-1.7.10"
     runDir = "eclipse"
     replaceIn "CoreRefs.java"
-    replace "@version@", modversion
+    replace "@version@", System.getenv('version')
 }
 
 dependencies {
