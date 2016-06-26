@@ -11,7 +11,9 @@ import appeng.tile.TileEvent;
 import appeng.tile.events.TileEventType;
 import appeng.tile.grid.AENetworkTile;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -81,7 +83,7 @@ public class TileAEDaisy extends TileGeneric implements IFloatingFlower {
 
     @Override
     public boolean canRecieveManaFromBursts() {
-        return true;
+        return !isFull();
     }
 
     @Override
@@ -115,6 +117,17 @@ public class TileAEDaisy extends TileGeneric implements IFloatingFlower {
         //endregion
         //region PassiveMode
         if (Config.isPassiveMode()){
+          boolean returnv = true;
+          Item daisy = vazkii.botania.common.item.block.ItemBlockSpecialFlower.ofType("puredaisy").getItem();
+          if (worldObj.getBlock(xCoord + 1, yCoord, zCoord) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord + 1, yCoord, zCoord)).equals(daisy))) returnv = false;
+          if (worldObj.getBlock(xCoord - 1, yCoord, zCoord) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord - 1, yCoord, zCoord)).equals(daisy))) returnv = false;
+
+          if (worldObj.getBlock(xCoord, yCoord + 1, zCoord) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord + 1 , zCoord)).equals(daisy))) returnv = false;
+          if (worldObj.getBlock(xCoord, yCoord - 1, zCoord) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord - 1 , zCoord)).equals(daisy))) returnv = false;
+
+          if (worldObj.getBlock(xCoord, yCoord, zCoord + 1) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord, zCoord + 1)).equals(daisy))) returnv = false;
+          if (worldObj.getBlock(xCoord, yCoord, zCoord - 1) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord, zCoord - 1)).equals(daisy))) returnv = false;
+          if (returnv) return;
 
         }
         //endregion

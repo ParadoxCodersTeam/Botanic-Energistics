@@ -10,6 +10,7 @@ import appeng.api.networking.crafting.ICraftingProviderHelper;
 import appeng.api.networking.security.MachineSource;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.me.GridAccessException;
+import appeng.me.helpers.AENetworkProxy;
 import appeng.tile.TileEvent;
 import appeng.tile.events.TileEventType;
 import appeng.tile.grid.AENetworkTile;
@@ -74,6 +75,7 @@ public class TileAERuneAssembler extends TileGeneric implements ISidedInventory 
 
 
     public TileAERuneAssembler() {
+        AENetworkProxy gridProxy = null;
         setName("runeassembler");
         availRecipes.clear();
         for (ItemStack stack : inventory) {
@@ -84,7 +86,18 @@ public class TileAERuneAssembler extends TileGeneric implements ISidedInventory 
             }
         }
         if(FMLCommonHandler.instance().getEffectiveSide().isServer()) {
-            this.gridProxy.setFlags(GridFlags.REQUIRE_CHANNEL);
+            try {
+                getClass().getSuperclass().getSuperclass().getDeclaredField("gridProxy").setAccessible(true);
+                Object gridP = getClass().getSuperclass().getSuperclass().getDeclaredField("gridProxy").get(null);
+                gridProxy = (AENetworkProxy) gridP;
+
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            if (gridProxy == null) return;
+            gridProxy.setFlags(GridFlags.REQUIRE_CHANNEL);
             gridProxy.setIdlePowerUsage(0.5D);
         }
 
