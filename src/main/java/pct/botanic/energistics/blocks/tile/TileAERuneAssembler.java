@@ -41,6 +41,7 @@ import vazkii.botania.common.crafting.recipe.HeadRecipe;
 import vazkii.botania.common.entity.EntityManaBurst;
 import vazkii.botania.common.item.ModItems;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,9 +88,11 @@ public class TileAERuneAssembler extends TileGeneric implements ISidedInventory 
         }
         if(FMLCommonHandler.instance().getEffectiveSide().isServer()) {
             try {
-                getClass().getSuperclass().getSuperclass().getDeclaredField("gridProxy").setAccessible(true);
-                Object gridP = getClass().getSuperclass().getSuperclass().getDeclaredField("gridProxy").get(null);
-                gridProxy = (AENetworkProxy) gridP;
+                Field f = null;
+                f = getClass().getSuperclass().getSuperclass().getDeclaredField("gridProxy");
+                f.setAccessible(true);
+                //if (f.get(this) == null) return;
+                gridProxy = (AENetworkProxy) f.get(this);
 
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();

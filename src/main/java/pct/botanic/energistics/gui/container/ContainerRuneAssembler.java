@@ -20,7 +20,8 @@ public class ContainerRuneAssembler extends ContainerCrossoverMod {
     private int lastMana;
 
     public ContainerRuneAssembler(InventoryPlayer playerInventory, TileGeneric te){
-       /* addPlayerSlots(playerInventory, 8, 84);
+       addPlayerSlots(playerInventory, 8, 84);
+        /*
 
         //left row
         addSlotToContainer(new Slot(te, 0, 62, 53));

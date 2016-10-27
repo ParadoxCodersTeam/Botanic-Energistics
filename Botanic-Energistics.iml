@@ -657,7 +657,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/appliedenergistics2-rv2-stable-3-dev.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/appliedenergistics2-rv3-beta-6-dev.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -675,7 +675,52 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/Botania r1.7-211-deobf.jar!/" />
+          <root url="jar://$MODULE_DIR$/libs/Botania r1.7-237-deobf.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/libs/MECable_Lime.png" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/libs/pylon.obj" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/libs/runeAltar0.png" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/libs/runeAltar1.png" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/libs/runeAltar2.png" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -690,7 +735,5 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Botania r1.7-224-deobf" level="project" />
-    <orderEntry type="library" name="appliedenergistics2-rv2-stable-10-dev" level="project" />
   </component>
 </module>

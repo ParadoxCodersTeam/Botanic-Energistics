@@ -126,7 +126,10 @@ public class TileAEDaisy extends TileGeneric implements IFloatingFlower {
           if (worldObj.getBlock(xCoord, yCoord - 1, zCoord) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord - 1 , zCoord)).equals(daisy))) returnv = false;
 
           if (worldObj.getBlock(xCoord, yCoord, zCoord + 1) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord, zCoord + 1)).equals(daisy))) returnv = false;
-          if (worldObj.getBlock(xCoord, yCoord, zCoord - 1) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord, zCoord - 1)).equals(daisy))) returnv = false;
+          if (worldObj.getBlock(xCoord, yCoord, zCoord - 1) 
+			  != Blocks.air && 
+		  (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord, zCoord - 1)) == null ? Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord, zCoord - 1)) : (worldObj.getBlock(xCoord, yCoord, zCoord - 1).getItemDropped(0, null, 0))).equals(daisy))
+		  returnv = false;
           if (returnv) return;
 
         }
