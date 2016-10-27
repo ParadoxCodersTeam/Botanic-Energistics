@@ -4,59 +4,48 @@ import appeng.api.AEApi;
 import appeng.api.networking.IGridNode;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import pct.botanic.energistics.BotanicEnergistics;
-import pct.botanic.energistics.blocks.tile.TileAEDaisy;
+import pct.botanic.energistics.blocks.tile.TileAEElvenPortal;
+import pct.botanic.energistics.blocks.tile.TileAERuneAssembler;
+import pct.botanic.energistics.gui.GUIHandler;
 import pct.botanic.energistics.references.CoreRefs;
 import pct.botanic.energistics.utilities.LexionEntryHelper;
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.lexicon.ILexiconable;
 import vazkii.botania.api.lexicon.LexiconEntry;
-import vazkii.botania.client.core.helper.IconHelper;
 import vazkii.botania.common.lexicon.page.PageElvenRecipe;
 import vazkii.botania.common.lexicon.page.PageText;
 
-public class AEPureDaisy extends BlockContainer implements ILexiconable{
-    IIcon icon;
+/**
+ * Created by beepbeat on 06.12.2015.
+ */
 
-    public AEPureDaisy(){
+public class AEElvenPortal extends BlockContainer implements ILexiconable {
+
+    IIcon[] icons;
+
+    public AEElvenPortal() {
         super(Material.iron);
-        setBlockName("aedaisy");
-        setBlockTextureName(CoreRefs.MODID + ":aedaisy");
+        setBlockName("elvenportal");
         setCreativeTab(BotanicEnergistics.botanicEnergisticsTab);
-    }
-
-
-    @Override
-    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
-        return new TileAEDaisy();
+        setBlockTextureName(CoreRefs.MODID + ":elvenportal");
     }
 
     @Override
-    public boolean renderAsNormalBlock() {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube() {
-        return false;
-    }
-
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
         if (world.isRemote) {
             return;
         }
         TileEntity tile = world.getTileEntity(x, y, z);
-        if (tile != null && tile instanceof TileAEDaisy) {
-            TileAEDaisy tileC = (TileAEDaisy) tile;
+        if (tile != null && tile instanceof TileAERuneAssembler) {
+            TileAERuneAssembler tileC = (TileAERuneAssembler) tile;
             tileC.getProxy().onReady();
             IGridNode node = tileC.getGridNode(ForgeDirection.UNKNOWN);
             if (entity != null && entity instanceof EntityPlayer) {
@@ -73,8 +62,8 @@ public class AEPureDaisy extends BlockContainer implements ILexiconable{
             return;
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile != null) {
-            if (tile instanceof TileAEDaisy) {
-                IGridNode node = ((TileAEDaisy) tile).getGridNode(ForgeDirection.UNKNOWN);
+            if (tile instanceof TileAERuneAssembler) {
+                IGridNode node = ((TileAERuneAssembler) tile).getGridNode(ForgeDirection.UNKNOWN);
                 if (node != null) {
                     node.destroy();
                 }
@@ -84,9 +73,15 @@ public class AEPureDaisy extends BlockContainer implements ILexiconable{
 
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        //return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
-        if (!world.isRemote){player.addChatComponentMessage(new ChatComponentText(String.valueOf(((TileAEDaisy)world.getTileEntity(x, y ,z)).getCurrentMana())));}
+    public TileEntity createNewTileEntity(World world, int meta) {
+        return new TileAEElvenPortal();
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitx, float hity, float hitz) {
+        if (!world.isRemote) {
+            player.openGui(BotanicEnergistics.instance, GUIHandler.GUIIDs.RuneAssembler.ordinal(), world, x, y, z);
+        }
         return true;
     }
 
@@ -95,10 +90,12 @@ public class AEPureDaisy extends BlockContainer implements ILexiconable{
         return getEntry();
     }
 
-    public LexiconEntry getEntry(){
-       LexiconEntry entry = new LexionEntryHelper.elvenKnowledgeEntry("entry.aedaisy", BotaniaAPI.categoryDevices, new ItemStack(BotanicEnergisticsBlocks.AEDaisy));
-        entry.addPage(new PageText("page1.aedaisy"));
-        entry.addPage(new PageElvenRecipe("pageRecipe.aedaisy", BotanicEnergisticsBlocks.RecAEDaisy));
+    public LexiconEntry getEntry() {
+        LexiconEntry entry = new LexionEntryHelper.elvenKnowledgeEntry("entry.elvenportal", BotaniaAPI.categoryDevices, new ItemStack(this));
+        //entry.addPage(LexionEntryHelper.LexiconPageCreator.createTextPage("page.elvenportal", 10, 10, 10, 12, "THIS IS A TEST TEXT!!!"));
+        //entry.addPage(new PageText("This is a test text page"));
+        entry.addPage(new PageText("page1.elvenportal"));
+        entry.addPage(new PageElvenRecipe("pageRecipe.elvenportal", BotanicEnergisticsBlocks.RecRuneAssembler));
         return entry;
     }
 }

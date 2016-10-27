@@ -15,6 +15,7 @@
 /gradlew.bat
 ## gradle
 .gradle/
+gradle.properties
 ## ForgeGradle
 /run
 
@@ -29,6 +30,11 @@ eclipse/
 .project
 /bin
 options.txt
+/libs/pylon.obj
+/libs/runeAltar0.png
+/libs/MECable_Lime.png
+/libs/runeAltar1.png
+/libs/runeAltar2.png
 
 ## intellij
 /out
