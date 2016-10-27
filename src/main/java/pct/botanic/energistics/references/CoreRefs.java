@@ -12,7 +12,8 @@ public class CoreRefs {
             + net.minecraftforge.common.ForgeVersion.majorVersion + '.' // majorVersion
             + net.minecraftforge.common.ForgeVersion.minorVersion + '.' // minorVersion
             + net.minecraftforge.common.ForgeVersion.revisionVersion + '.' // revisionVersion
-            + net.minecraftforge.common.ForgeVersion.buildVersion + ",);required-after:Botania;required-after:appliedenergistics2"; // buildVersion
+            + net.minecraftforge.common.ForgeVersion.buildVersion + // buildVersion
+        ",);required-after:Botania;required-after:appliedenergistics2";
     public static final String CTAB = "bot.ae";
 
 }

@@ -54,3 +54,6 @@ crash-reports/
 config/
 BotaniaVars.dat
 usernamecache.json
+/Botanic-Energistics.iws
+/Botanic-Energistics.iml
+/Botanic-Energistics.ipr
