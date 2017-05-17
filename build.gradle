@@ -77,7 +77,7 @@ curse {
 	
     displayName = 'Botanic Energistics ' + version
     artifact = file('build/libs/' + archivesBaseName + '-' + version + '.jar')
-    changelog = System.getenv('changelog');
+    changelog = System.getenv('changelog')
     addGameVersion '1.7.10', '1.7.2'
 
     relatedProject 'applied-energistics-2'

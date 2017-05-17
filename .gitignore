@@ -15,7 +15,7 @@
 /gradlew.bat
 ## gradle
 .gradle/
-##gradle.properties
+gradle.properties
 ## ForgeGradle
 /run
 

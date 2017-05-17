@@ -117,22 +117,30 @@ public class TileAEDaisy extends TileGeneric implements IFloatingFlower {
         //endregion
         //region PassiveMode
         if (Config.isPassiveMode()){
-          boolean returnv = true;
-          Item daisy = vazkii.botania.common.item.block.ItemBlockSpecialFlower.ofType("puredaisy").getItem();
-          if (worldObj.getBlock(xCoord + 1, yCoord, zCoord) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord + 1, yCoord, zCoord)).equals(daisy))) returnv = false;
-          if (worldObj.getBlock(xCoord - 1, yCoord, zCoord) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord - 1, yCoord, zCoord)).equals(daisy))) returnv = false;
+            try {
+                boolean returnv = true;
+                Item daisy = vazkii.botania.common.item.block.ItemBlockSpecialFlower.ofType("puredaisy").getItem();
+                if (worldObj.getBlock(xCoord + 1, yCoord, zCoord) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord + 1, yCoord, zCoord)).equals(daisy)))
+                    returnv = false;
+                if (worldObj.getBlock(xCoord - 1, yCoord, zCoord) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord - 1, yCoord, zCoord)).equals(daisy)))
+                    returnv = false;
 
-          if (worldObj.getBlock(xCoord, yCoord + 1, zCoord) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord + 1 , zCoord)).equals(daisy))) returnv = false;
-          if (worldObj.getBlock(xCoord, yCoord - 1, zCoord) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord - 1 , zCoord)).equals(daisy))) returnv = false;
+                if (worldObj.getBlock(xCoord, yCoord + 1, zCoord) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord + 1, zCoord)).equals(daisy)))
+                    returnv = false;
+                if (worldObj.getBlock(xCoord, yCoord - 1, zCoord) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord - 1, zCoord)).equals(daisy)))
+                    returnv = false;
 
-          if (worldObj.getBlock(xCoord, yCoord, zCoord + 1) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord, zCoord + 1)).equals(daisy))) returnv = false;
-          if (worldObj.getBlock(xCoord, yCoord, zCoord - 1) 
-			  != Blocks.air && 
-		  (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord, zCoord - 1)) == null ? Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord, zCoord - 1)) : (worldObj.getBlock(xCoord, yCoord, zCoord - 1).getItemDropped(0, null, 0))).equals(daisy))
-		  returnv = false;
-          if (returnv) return;
+                if (worldObj.getBlock(xCoord, yCoord, zCoord + 1) != Blocks.air && (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord, zCoord + 1)).equals(daisy)))
+                    returnv = false;
+                if (worldObj.getBlock(xCoord, yCoord, zCoord - 1)
+                        != Blocks.air &&
+                        (Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord, zCoord - 1)) == null ? Item.getItemFromBlock(worldObj.getBlock(xCoord, yCoord, zCoord - 1)) : (worldObj.getBlock(xCoord, yCoord, zCoord - 1).getItemDropped(0, null, 0))).equals(daisy))
+                    returnv = false;
+                if (returnv) return;
 
-        }
+            }catch (Exception ignored){return;}
+
+    }
         //endregion
         boolean validRecipe = false;
         if (input != null && output != null) {
